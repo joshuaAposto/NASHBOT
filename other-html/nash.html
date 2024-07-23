@@ -14,24 +14,32 @@
     .user-message { background-color: #4e54c8; border-color: #fff; color: #fff; text-align: right; margin-left: auto; }
     .bot-message { background-color: #fff; border-color: #000; color: #000; text-align: left; margin-right: auto; }
     .code-box { background-color: #333; border: 2px solid #fff; border-radius: 5px; padding: 10px; white-space: pre-wrap; overflow-x: auto; margin: 10px 0; color: #fff; font-family: 'Courier New', Courier, monospace; position: relative; }
-    .copy-button { background: #4e54c8; color: #fff; border: none; padding: 5px 10px; cursor: pointer; border-radius: 5px; transition: background 0.3s ease; margin-top: 10px; position: absolute; right: 10px; bottom: 10px; }
+    .copy-button { background: #4e54c8; color: #fff; border: none; padding: 5px 10px; cursor: pointer; border-radius: 5px; transition: background 0.3s ease; position: absolute; top: 10px; right: 10px; }
     .copy-button:hover { background: #8f94fb; }
     .input-container { display: flex; padding: 20px; background-color: rgba(0, 0, 0, 0.8); }
     input[type="text"], .btn { padding: 10px; border-radius: 5px; border: none; }
     input[type="text"] { flex: 1; font-size: 1rem; margin-right: 10px; }
     .btn { background: #4e54c8; color: #fff; font-size: 1rem; cursor: pointer; transition: background 0.3s ease; }
     .btn:hover { background: #8f94fb; }
-    .footer { text-align: center; padding: 10px; background-color: rgba(0, 0, 0, 0.8); color: white; position: sticky; bottom: 0; }
     .sidebar { width: 300px; background: rgba(0, 0, 0, 0.8); position: fixed; top: 0; right: -300px; height: 100%; padding: 20px; display: flex; flex-direction: column; transition: right 0.3s ease; z-index: 1000; }
     .sidebar.open { right: 0; }
     .sidebar .chat-list { list-style: none; padding: 0; margin: 0; flex: 1; overflow-y: auto; }
-    .sidebar .chat-item { background: #4e54c8; color: #fff; padding: 10px; border-radius: 5px; margin-bottom: 10px; cursor: pointer; }
+    .sidebar .chat-item { background: #4e54c8; color: #fff; padding: 10px; border-radius: 5px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
     .sidebar .chat-item:hover { background: #8f94fb; }
-    .sidebar .new-chat-button { margin-bottom: 20px; }
     .menu-toggle { font-size: 2rem; cursor: pointer; position: absolute; top: 20px; left: 10px; z-index: 1000; }
     .menu-toggle.open { color: #fff; }
     .menu-toggle.close { color: #fff; }
     .menu-toggle:hover { color: #8f94fb; }
+    .typing-indicator { font-style: italic; color: #000; }
+    .btn-container { margin-top: auto; }
+    .chat-header p { margin-top: 5px; font-size: 0.9rem; }
+    .chat-item span { margin-right: 10px; }
+    .model-selection { margin: 10px 0; padding: 10px; border-radius: 5px; border: 2px solid #fff; background-color: #4e54c8; color: #fff; cursor: pointer; }
+    .model-selection:hover { background-color: #8f94fb; }
+    .model-button { display: block; margin: 10px 0; padding: 10px; border-radius: 5px; background-color: #4e54c8; color: #fff; cursor: pointer; }
+    .model-button:hover { background-color: #8f94fb; }
+    .reset-button { display: block; margin: 10px 0; padding: 10px; border-radius: 5px; background-color: #f44336; color: #fff; cursor: pointer; }
+    .reset-button:hover { background-color: #d32f2f; }
 </style>
 </head>
 <body>
@@ -49,8 +57,11 @@
 </div>
 
 <div id="sidebar" class="sidebar">
-    <button class="btn new-chat-button" onclick="promptNewChatName()">New Chat</button>
-    <ul id="chat-list" class="chat-list"></ul>
+    <button class="btn" onclick="promptNewChatName()">New Chat</button>
+    <button class="reset-button" onclick="resetLocalStorage()">Reset Local Storage</button>
+    <div class="btn-container">
+        <ul id="chat-list" class="chat-list"></ul>
+    </div>
 </div>
 
 <span id="menu-toggle" class="menu-toggle" onclick="toggleSidebar()">☰</span>
@@ -61,23 +72,54 @@
     const sidebar = document.getElementById('sidebar');
     const chatList = document.getElementById('chat-list');
     const menuToggle = document.getElementById('menu-toggle');
+    let selectedModel = localStorage.getItem('selectedModel') || null;
+
+    const apiEndpoints = {
+        'NashBot-3': 'https://nash-api-end.onrender.com/gpt3?prompt=',
+        'Glm4': 'https://nash-api-end.onrender.com/glm4?message=',
+        'Gemini': 'https://nash-api-end.onrender.com/gemini?prompt='
+    };
 
     window.onload = function() {
+        if (selectedModel) {
+            loadChatHistory();
+        } else {
+            showWelcomeMessage();
+        }
         updateChatList();
-        loadChatHistory('Welcome');
     };
 
     function sendPrompt() {
         const prompt = promptInput.value.trim();
         if (!prompt) return;
 
+        if (prompt.toLowerCase() === 'help') {
+            if (!selectedModel) {
+                displayModelSelection();
+            } else {
+                displayHelpMessage();
+            }
+            promptInput.value = ''; 
+            return;
+        }
+
+        if (prompt.toLowerCase() === 'switch model') {
+            displayModelSelection();
+            promptInput.value = ''; 
+            return;
+        }
+
+        if (!selectedModel) {
+            alert('Please select a model by typing "help" and choosing one.');
+            promptInput.value = ''; 
+            return;
+        }
+
         const userMessageDiv = document.createElement('div');
         userMessageDiv.className = 'chat-message user-message';
         userMessageDiv.textContent = prompt;
         chatBox.appendChild(userMessageDiv);
         chatBox.scrollTop = chatBox.scrollHeight;
-
-        promptInput.value = '';
 
         const typingDiv = document.createElement('div');
         typingDiv.className = 'typing-indicator';
@@ -89,24 +131,23 @@
             chatBox.removeChild(typingDiv);
 
             try {
-                const response = await fetch(`https://nash-api-end.onrender.com/gpt3?prompt=${encodeURIComponent(prompt)}`);
+                const response = await fetch(`${apiEndpoints[selectedModel]}${encodeURIComponent(prompt)}`);
                 const data = await response.json();
 
                 const botMessageDiv = document.createElement('div');
                 botMessageDiv.className = 'chat-message bot-message';
 
-                if (data.result.reply) {
-                    let replyText = data.result.reply;
-                    
+                let replyText = '';
+                if (data.result && data.result.reply) {
+                    replyText = data.result.reply;
                     replyText = replyText.replace(/OpenAI|GPT|ChatGPT/g, 'NashBot');
-
-                    const codePattern = /```([\s\S]*?)```/g;
-                    let lastIndex = 0;
+                    const codeRegex = /```([\s\S]*?)```/g;
                     let match;
+                    let lastIndex = 0;
 
-                    while ((match = codePattern.exec(replyText)) !== null) {
-                        const preText = replyText.slice(lastIndex, match.index);
-                        if (preText) {
+                    while ((match = codeRegex.exec(replyText)) !== null) {
+                        if (match.index > lastIndex) {
+                            const preText = replyText.slice(lastIndex, match.index);
                             const preTextDiv = document.createElement('div');
                             preTextDiv.textContent = preText;
                             botMessageDiv.appendChild(preTextDiv);
@@ -120,38 +161,40 @@
                         const copyButton = document.createElement('button');
                         copyButton.className = 'copy-button';
                         copyButton.textContent = 'Copy';
-                        copyButton.onclick = () => {
-                            copyToClipboard(codeText, copyButton);
-                        };
+                        copyButton.onclick = () => copyToClipboard(codeText, copyButton);
 
                         codeDiv.appendChild(copyButton);
                         botMessageDiv.appendChild(codeDiv);
 
-                        lastIndex = codePattern.lastIndex;
+                        lastIndex = match.index + match[0].length;
                     }
 
-                    const remainingText = replyText.slice(lastIndex);
-                    if (remainingText) {
+                    if (lastIndex < replyText.length) {
+                        const remainingText = replyText.slice(lastIndex);
                         const remainingTextDiv = document.createElement('div');
                         remainingTextDiv.textContent = remainingText;
                         botMessageDiv.appendChild(remainingTextDiv);
                     }
-
                 } else {
-                    botMessageDiv.textContent = 'Failed to fetch response';
+                    if (selectedModel === 'Glm4') {
+                        botMessageDiv.textContent = data.fullResponse;
+                    } else if (selectedModel === 'Gemini') {
+                        botMessageDiv.textContent = data.response;
+                    } else {
+                        botMessageDiv.textContent = data.result.reply;
+                    }
                 }
 
                 chatBox.appendChild(botMessageDiv);
                 chatBox.scrollTop = chatBox.scrollHeight;
 
-                if (document.querySelector('.chat-history-name')?.value.trim().toLowerCase() !== 'no') {
-                    saveChatHistory();
-                    updateChatList();
-                }
+                saveChatHistory(selectedModel);
             } catch (error) {
                 console.error('Error:', error);
             }
         }, 1000);
+
+        promptInput.value = ''; 
     }
 
     function copyToClipboard(text, button) {
@@ -161,10 +204,9 @@
         textArea.select();
         try {
             document.execCommand('copy');
-            button.textContent = 'Copied';
-            setTimeout(() => button.textContent = 'Copy', 2000);
+            button.textContent = 'Copied!';
         } catch (err) {
-            console.error('Unable to copy', err);
+            console.error('Failed to copy text:', err);
         }
         document.body.removeChild(textArea);
     }
@@ -177,7 +219,7 @@
                 updateChatList();
             }
             clearChat();
-            loadChatHistory('Welcome');
+            loadChatHistory();
         }
     }
 
@@ -195,10 +237,17 @@
 
         const chatHistories = JSON.parse(localStorage.getItem('chatHistories')) || {};
         chatHistories[name] = messages;
+
+        const historyKeys = Object.keys(chatHistories);
+        if (historyKeys.length > 100) {
+            const oldestKey = historyKeys[0];
+            delete chatHistories[oldestKey];
+        }
+
         localStorage.setItem('chatHistories', JSON.stringify(chatHistories));
     }
 
-    function loadChatHistory(name) {
+    function loadChatHistory(name = 'Welcome') {
         const chatHistories = JSON.parse(localStorage.getItem('chatHistories')) || {};
         const messages = chatHistories[name] || [];
 
@@ -210,16 +259,60 @@
                 chatBox.appendChild(messageDiv);
             });
         } else {
-            const welcomeMessageDiv = createWelcomeMessage();
-            chatBox.appendChild(welcomeMessageDiv);
+            showWelcomeMessage();
         }
     }
 
-    function createWelcomeMessage() {
+    function showWelcomeMessage() {
         const welcomeMessageDiv = document.createElement('div');
         welcomeMessageDiv.className = 'chat-message bot-message';
-        welcomeMessageDiv.textContent = 'Welcome to NashBot! How can I assist you today?';
-        return welcomeMessageDiv;
+        welcomeMessageDiv.innerHTML = `
+            <p>Welcome to NashBot! How can I assist you today?</p>
+            <p>To change the model, type "help" and select your desired model. The available models are:</p>
+            <ul>
+                <li>NASHBOT-3</li>
+                <li>Glm4</li>
+                <li>Gemini</li>
+            </ul>
+            <p>You can type "switch model" anytime to change the model.</p>
+        `;
+        chatBox.appendChild(welcomeMessageDiv);
+    }
+
+    function displayModelSelection() {
+        const models = ['NashBot-3', 'Glm4', 'Gemini'];
+        const modelSelectionDiv = document.createElement('div');
+        modelSelectionDiv.className = 'model-selection';
+        modelSelectionDiv.textContent = 'Select a model:';
+
+        models.forEach(model => {
+            const modelButton = document.createElement('button');
+            modelButton.className = 'model-button';
+            modelButton.textContent = model;
+            modelButton.onclick = () => {
+                selectedModel = model;
+                localStorage.setItem('selectedModel', selectedModel);
+                clearChat();
+                const modelSelectedMessageDiv = document.createElement('div');
+                modelSelectedMessageDiv.className = 'chat-message bot-message';
+                modelSelectedMessageDiv.textContent = `You have selected ${model} model.`;
+                chatBox.appendChild(modelSelectedMessageDiv);
+                chatBox.scrollTop = chatBox.scrollHeight;
+                saveChatHistory('Welcome');
+            };
+            modelSelectionDiv.appendChild(modelButton);
+        });
+
+        chatBox.appendChild(modelSelectionDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function displayHelpMessage() {
+        const helpMessageDiv = document.createElement('div');
+        helpMessageDiv.className = 'chat-message bot-message';
+        helpMessageDiv.textContent = `Please select a model by typing "help" and choosing one from the available models: NashBot-3, Glm4, Gemini. You can type "switch model" anytime to change the model.`;
+        chatBox.appendChild(helpMessageDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
     }
 
     function updateChatList() {
@@ -230,11 +323,10 @@
             const chatItem = document.createElement('li');
             chatItem.className = 'chat-item';
             chatItem.textContent = name;
+
             chatItem.onclick = () => {
                 clearChat();
                 loadChatHistory(name);
-                sidebar.classList.remove('open');
-                menuToggle.textContent = '☰';
             };
             chatList.appendChild(chatItem);
         });
@@ -244,6 +336,18 @@
         sidebar.classList.toggle('open');
         menuToggle.textContent = sidebar.classList.contains('open') ? '✖' : '☰';
     }
+
+    function resetLocalStorage() {
+        if (confirm('Are you sure you want to reset local storage? This will delete all chat histories and settings.')) {
+            localStorage.removeItem('chatHistories');
+            localStorage.removeItem('selectedModel');
+            alert('Local storage has been reset.');
+            clearChat();
+            showWelcomeMessage();
+            updateChatList();
+        }
+    }
 </script>
+
 </body>
 </html>
