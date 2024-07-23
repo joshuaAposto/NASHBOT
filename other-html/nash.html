@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NashBot AI Chatbot</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: linear-gradient(45deg, #4e54c8, #8f94fb); color: #fff; height: 100vh; display: flex; }
+    .chat-container { flex: 1; display: flex; flex-direction: column; width: 100%; }
+    .chat-header { text-align: center; padding: 20px; background-color: rgba(0, 0, 0, 0.8); }
+    .chat-box { flex: 1; overflow-y: auto; padding: 20px; background: rgba(255, 255, 255, 0.1); position: relative; }
+    .chat-message { margin: 10px 0; padding: 10px; border-radius: 5px; border: 2px solid; position: relative; max-width: 80%; word-wrap: break-word; }
+    .user-message { background-color: #4e54c8; border-color: #fff; color: #fff; text-align: right; margin-left: auto; }
+    .bot-message { background-color: #fff; border-color: #000; color: #000; text-align: left; margin-right: auto; }
+    .code-box { background-color: #333; border: 2px solid #fff; border-radius: 5px; padding: 10px; white-space: pre-wrap; overflow-x: auto; margin: 10px 0; color: #fff; font-family: 'Courier New', Courier, monospace; position: relative; }
+    .copy-button { background: #4e54c8; color: #fff; border: none; padding: 5px 10px; cursor: pointer; border-radius: 5px; transition: background 0.3s ease; margin-top: 10px; position: absolute; right: 10px; bottom: 10px; }
+    .copy-button:hover { background: #8f94fb; }
+    .input-container { display: flex; padding: 20px; background-color: rgba(0, 0, 0, 0.8); }
+    input[type="text"], .btn { padding: 10px; border-radius: 5px; border: none; }
+    input[type="text"] { flex: 1; font-size: 1rem; margin-right: 10px; }
+    .btn { background: #4e54c8; color: #fff; font-size: 1rem; cursor: pointer; transition: background 0.3s ease; }
+    .btn:hover { background: #8f94fb; }
+    .footer { text-align: center; padding: 10px; background-color: rgba(0, 0, 0, 0.8); color: white; position: sticky; bottom: 0; }
+    .sidebar { width: 300px; background: rgba(0, 0, 0, 0.8); position: fixed; top: 0; right: -300px; height: 100%; padding: 20px; display: flex; flex-direction: column; transition: right 0.3s ease; z-index: 1000; }
+    .sidebar.open { right: 0; }
+    .sidebar .chat-list { list-style: none; padding: 0; margin: 0; flex: 1; overflow-y: auto; }
+    .sidebar .chat-item { background: #4e54c8; color: #fff; padding: 10px; border-radius: 5px; margin-bottom: 10px; cursor: pointer; }
+    .sidebar .chat-item:hover { background: #8f94fb; }
+    .sidebar .new-chat-button { margin-bottom: 20px; }
+    .menu-toggle { font-size: 2rem; cursor: pointer; position: absolute; top: 20px; left: 10px; z-index: 1000; }
+    .menu-toggle.open { color: #fff; }
+    .menu-toggle.close { color: #fff; }
+    .menu-toggle:hover { color: #8f94fb; }
+</style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="chat-header">
+        <h1>NashBot AI Chatbot</h1>
+        <p>Version 1.0</p>
+    </div>
+    <div id="chat-box" class="chat-box"></div>
+    <div class="input-container">
+        <input type="text" id="prompt" placeholder="Enter your message">
+        <button class="btn" onclick="sendPrompt()">Send</button>
+    </div>
+</div>
+
+<div id="sidebar" class="sidebar">
+    <button class="btn new-chat-button" onclick="promptNewChatName()">New Chat</button>
+    <ul id="chat-list" class="chat-list"></ul>
+</div>
+
+<span id="menu-toggle" class="menu-toggle" onclick="toggleSidebar()">☰</span>
+
+<script>
+    const chatBox = document.getElementById('chat-box');
+    const promptInput = document.getElementById('prompt');
+    const sidebar = document.getElementById('sidebar');
+    const chatList = document.getElementById('chat-list');
+    const menuToggle = document.getElementById('menu-toggle');
+
+    window.onload = function() {
+        updateChatList();
+        loadChatHistory('Welcome');
+    };
+
+    function sendPrompt() {
+        const prompt = promptInput.value.trim();
+        if (!prompt) return;
+
+        const userMessageDiv = document.createElement('div');
+        userMessageDiv.className = 'chat-message user-message';
+        userMessageDiv.textContent = prompt;
+        chatBox.appendChild(userMessageDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        promptInput.value = '';
+
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'typing-indicator';
+        typingDiv.textContent = 'NashBot is typing...';
+        chatBox.appendChild(typingDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        setTimeout(async () => {
+            chatBox.removeChild(typingDiv);
+
+            try {
+                const response = await fetch(`https://nash-api-end.onrender.com/gpt3?prompt=${encodeURIComponent(prompt)}`);
+                const data = await response.json();
+
+                const botMessageDiv = document.createElement('div');
+                botMessageDiv.className = 'chat-message bot-message';
+
+                if (data.result.reply) {
+                    let replyText = data.result.reply;
+                    
+                    replyText = replyText.replace(/OpenAI|GPT|ChatGPT/g, 'NashBot');
+
+                    const codePattern = /```([\s\S]*?)```/g;
+                    let lastIndex = 0;
+                    let match;
+
+                    while ((match = codePattern.exec(replyText)) !== null) {
+                        const preText = replyText.slice(lastIndex, match.index);
+                        if (preText) {
+                            const preTextDiv = document.createElement('div');
+                            preTextDiv.textContent = preText;
+                            botMessageDiv.appendChild(preTextDiv);
+                        }
+
+                        const codeText = match[1];
+                        const codeDiv = document.createElement('div');
+                        codeDiv.className = 'code-box';
+                        codeDiv.textContent = codeText;
+
+                        const copyButton = document.createElement('button');
+                        copyButton.className = 'copy-button';
+                        copyButton.textContent = 'Copy';
+                        copyButton.onclick = () => {
+                            copyToClipboard(codeText, copyButton);
+                        };
+
+                        codeDiv.appendChild(copyButton);
+                        botMessageDiv.appendChild(codeDiv);
+
+                        lastIndex = codePattern.lastIndex;
+                    }
+
+                    const remainingText = replyText.slice(lastIndex);
+                    if (remainingText) {
+                        const remainingTextDiv = document.createElement('div');
+                        remainingTextDiv.textContent = remainingText;
+                        botMessageDiv.appendChild(remainingTextDiv);
+                    }
+
+                } else {
+                    botMessageDiv.textContent = 'Failed to fetch response';
+                }
+
+                chatBox.appendChild(botMessageDiv);
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+                if (document.querySelector('.chat-history-name')?.value.trim().toLowerCase() !== 'no') {
+                    saveChatHistory();
+                    updateChatList();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }, 1000);
+    }
+
+    function copyToClipboard(text, button) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            button.textContent = 'Copied';
+            setTimeout(() => button.textContent = 'Copy', 2000);
+        } catch (err) {
+            console.error('Unable to copy', err);
+        }
+        document.body.removeChild(textArea);
+    }
+
+    function promptNewChatName() {
+        const chatName = prompt('Enter a name for this chat (or type "No" to discard):');
+        if (chatName !== null) {
+            if (chatName.trim().toLowerCase() !== 'no') {
+                saveChatHistory(chatName);
+                updateChatList();
+            }
+            clearChat();
+            loadChatHistory('Welcome');
+        }
+    }
+
+    function clearChat() {
+        chatBox.innerHTML = '';
+    }
+
+    function saveChatHistory(name) {
+        if (!name) return;
+
+        const messages = Array.from(chatBox.getElementsByClassName('chat-message')).map(div => ({
+            text: div.innerHTML,
+            className: div.className
+        }));
+
+        const chatHistories = JSON.parse(localStorage.getItem('chatHistories')) || {};
+        chatHistories[name] = messages;
+        localStorage.setItem('chatHistories', JSON.stringify(chatHistories));
+    }
+
+    function loadChatHistory(name) {
+        const chatHistories = JSON.parse(localStorage.getItem('chatHistories')) || {};
+        const messages = chatHistories[name] || [];
+
+        if (messages.length > 0) {
+            messages.forEach(message => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = message.className;
+                messageDiv.innerHTML = message.text;
+                chatBox.appendChild(messageDiv);
+            });
+        } else {
+            const welcomeMessageDiv = createWelcomeMessage();
+            chatBox.appendChild(welcomeMessageDiv);
+        }
+    }
+
+    function createWelcomeMessage() {
+        const welcomeMessageDiv = document.createElement('div');
+        welcomeMessageDiv.className = 'chat-message bot-message';
+        welcomeMessageDiv.textContent = 'Welcome to NashBot! How can I assist you today?';
+        return welcomeMessageDiv;
+    }
+
+    function updateChatList() {
+        const chatHistories = JSON.parse(localStorage.getItem('chatHistories')) || {};
+        chatList.innerHTML = '';
+
+        Object.keys(chatHistories).forEach(name => {
+            const chatItem = document.createElement('li');
+            chatItem.className = 'chat-item';
+            chatItem.textContent = name;
+            chatItem.onclick = () => {
+                clearChat();
+                loadChatHistory(name);
+                sidebar.classList.remove('open');
+                menuToggle.textContent = '☰';
+            };
+            chatList.appendChild(chatItem);
+        });
+    }
+
+    function toggleSidebar() {
+        sidebar.classList.toggle('open');
+        menuToggle.textContent = sidebar.classList.contains('open') ? '✖' : '☰';
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Joshua Apostol | Portfolio</title>
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  color: #fff;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.header h1 {
+  font-size: 3rem;
+  color: #ffd700;
+  margin-bottom: 10px;
+}
+
+.profile-picture {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  margin: 20px auto;
+  display: block;
+  border: 5px solid #ffd700;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.stats div {
+  text-align: center;
+}
+
+.stats h3 {
+  margin: 0;
+  color: #ffd700;
+}
+
+.stats p {
+  font-size: 1.2rem;
+}
+
+.navbar {
+  background-color: #2a2a2a;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.navbar a {
+  display: block;
+  color: #fff;
+  text-align: center;
+  padding: 15px 20px;
+  text-decoration: none;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.navbar a:hover {
+  background-color: #444;
+  transform: scale(1.05);
+}
+
+.section {
+  padding: 20px;
+  margin-bottom: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.section h2 {
+  color: #ffd700;
+  margin-bottom: 20px;
+}
+
+.section p {
+  color: #ddd;
+  line-height: 1.8;
+}
+
+.resume {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.resume h2 {
+  color: #ffd700;
+  margin-bottom: 20px;
+}
+
+.resume p {
+  color: #ddd;
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+}
+
+.resume-btn {
+  background-color: #1e3c72;
+  color: #fff;
+  border-radius: 5px;
+  padding: 15px 30px;
+  font-size: 1.1rem;
+  transition: background-color 0.3s, transform 0.3s;
+  text-decoration: none;
+}
+
+.resume-btn:hover {
+  background-color: #1e3c72;
+  transform: scale(1.05);
+}
+
+.project-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.project-list li {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.project-image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 25px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  margin-top: 10px;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+#portfolio {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+#portfolio h2 {
+  font-size: 2.5em;
+  font-weight: bold;
+  color: #007bff;>    
+  margin-bottom: 30px;
+  position: relative;
+  display: inline-block;
+}
+
+#portfolio h2::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background-color: #007bff;
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
+
+
+#live-clock-section {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+#live-clock-section h2 {
+  color: #ffd700;
+  margin-bottom: 20px;
+}
+
+.skills-container {
+  margin-bottom: 20px;
+}
+
+.skill {
+  margin-bottom: 15px;
+}
+
+.skill-bar {
+  height: 20px;
+  background-color: #444;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 5px;
+  position: relative;
+}
+
+.skill-bar-fill {
+  height: 100%;
+  background-color: #ffd700;
+  line-height: 20px;
+  position: relative;
+  width: 0;
+  transition: width 1s ease-in-out;
+  color: #000;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 25px;
+  background-color: #ffd700;
+  color: #000;
+  text-decoration: none;
+  text-align: center;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.btn:hover {
+  background-color: #ffcc00;
+  transform: scale(1.05);
+}
+
+.project-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.project-list li {
+  margin-bottom: 25px;
+}
+
+.project-description {
+  margin-bottom: 10px;
+}
+
+.contact-info {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.contact-info a {
+  color: #ffd700;
+  text-decoration: none;
+}
+
+.contact-info a:hover {
+  text-decoration: underline;
+}
+
+.achievements {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 40px;
+}
+
+.achievements h2 {
+  color: #ffd700;
+}
+
+.achievement-item {
+  margin-bottom: 15px;
+}
+
+.achievement-item h3 {
+  margin-bottom: 5px;
+}
+
+.achievement-item p {
+  margin: 0;
+  color: #ddd;
+}
+
+.video-gallery {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.video-gallery h2 {
+  color: #ffd700;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.scroll-notice {
+  color: #ffd700;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+}
+
+.video-gallery-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 20px;
+  padding: 10px;
+  scroll-snap-type: x mandatory;
+}
+
+.video-item {
+  flex: 0 0 auto;
+  width: 300px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  scroll-snap-align: start;
+}
+
+.video-item video {
+  width: 100%;
+  height: auto;
+}
+
+.video-item p {
+  padding: 10px;
+  color: #ddd;
+}
+
+.video-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.video {
+  flex: 1;
+  min-width: 300px;
+  height: 0;
+  padding-bottom: 56.25%;
+  position: relative;
+}
+
+.video iframe {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border: none;
+}
+
+.external-links {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.external-links a {
+  display: block;
+  margin-bottom: 10px;
+  color: #ffd700;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+.external-links a:hover {
+  text-decoration: underline;
+}
+
+.counter-container {
+  text-align: center;
+  margin-top: 20px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.counter-container p {
+  margin-bottom: 10px;
+  color: #ffd700;
+}
+
+.counter-container a {
+  color: #ffd700;
+  text-decoration: none;
+}
+
+.counter-container a:hover {
+  text-decoration: underline;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .header h1 {
+    font-size: 2.5rem;
+  }
+
+  .profile-picture {
+    width: 150px;
+    height: 150px;
+  }
+
+  .navbar {
+    flex-direction: column;
+  }
+
+  .navbar a {
+    padding: 10px;
+  }
+
+  .section {
+    padding: 15px;
+  }
+  .external-links {
+  text-align: center;
+  margin-top: 20px;
+ }
+  .external-links a {
+  display: block;
+  margin-bottom: 10px;
+  color: #ffd700;
+  text-decoration: none;
+  font-size: 1.2rem;
+ }
+
+  .external-links a:hover {
+  text-decoration: underline;
+ }
+ 
+  @media (max-width: 480px) {
+  .video-container {
+   flex-direction: column;
+  }
+  
+  .notification-banner {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #333;
+  color: #ffd700;
+  padding: 10px;
+  text-align: center;
+  font-size: 1.2rem;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+ }
+
+ .notification-text {
+  display: inline;
+ }
+
+ .notification-close {
+  background: none;
+  border: none;
+  color: #ffd700;
+  font-size: 1.5rem;
+  cursor: pointer;
+  float: right;
+ }
+
+ .countdown-timer {
+  display: inline-block;
+  margin-left: 10px;
+  font-weight: bold;
+ }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <img class="profile-picture" src="https://i.imgur.com/mmBfKMo.jpeg" alt="Profile Picture">
+    <h1>Joshua Apostol</h1>
+    <p>Web Developer | Designer</p>
+    <div class="stats">
+      <div>
+        <h3>Followers</h3>
+        <p>50,000</p>
+      </div>
+      <div>
+        <h3>Likes</h3>
+        <p>70,000</p>
+      </div>
+      <div>
+        <h3>Projects</h3>
+        <p>6</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="navbar">
+    <a href="#about">About</a>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#videos">Tutorials</a>
+    <a href="#contact">Contact</a>
+    <a href="#achievements">Achievements</a>
+    <a href="learn.html">Learn Code</a>
+  </div>
+
+  <div id="about" class="section">
+    <h2>About Me</h2>
+    <p>I’m passionate about learning new technologies and creating innovative projects. As a beginner in HTML, CSS, JS, and Node.js, I continually work on enhancing my skills and developing projects that inspire me.</p>
+    <div class="skills-container">
+      <h3>Skills</h3>
+      <div class="skill">
+        <span>HTML</span>
+        <div class="skill-bar">
+          <div class="skill-bar-fill" data-skill="70"><span>70%</span></div>
+        </div>
+      </div>
+      
+      <div class="skill">
+        <span>CSS</span>
+        <div class="skill-bar">
+          <div class="skill-bar-fill" data-skill="50"><span>50%</span></div>
+        </div>
+      </div>
+      
+      <div class="skill">
+        <span>JavaScript</span>
+        <div class="skill-bar">
+          <div class="skill-bar-fill" data-skill="30"><span>30%</span></div>
+        </div>
+      </div>
+      
+      <div class="skill">
+        <span>Node.js</span>
+        <div class="skill-bar">
+          <div class="skill-bar-fill" data-skill="60"><span>60%</span></div>
+        </div>
+      </div>
+      
+      <div class="skill">
+        <span>Python</span>
+        <div class="skill-bar">
+          <div class="skill-bar-fill" data-skill="20"><span>20%</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div id="live-clock-section" class="section">
+    <h2>Live Clock</h2>
+    <div id="liveClock" style="font-size: 2rem; font-family: 'Courier New', Courier, monospace;"></div>
+   </div>
+
+  <div id="portfolio" class="section">
+  <h2>Portfolio</h2>
+  <ul class="project-list">
+    <li>
+      <img src="https://i.imgur.com/bNtTDI5.jpeg" alt="NASHBOT FB BOT Image" class="project-image">
+      <h3>NASHBOT FB BOT</h3>
+      <div class="project-description">
+        <p>This is the best messenger chatbot because it can help you create an essay or anything you need for education. Currently, it has 39 commands.</p>
+      </div>
+      <a href="https://nash-bot-v2.onrender.com" class="btn">NASHBOT</a>
+    </li>
+    <li>
+      <img src="https://i.imgur.com/vdBytT7.jpeg" alt="AUTOBOT FB BOT Image" class="project-image">
+      <h3>AUTOBOT FB BOT</h3>
+      <div class="project-description">
+        <p>This is the best messenger chatbot because it can help you create an essay or anything you need for education. Currently, it has 24 commands.</p>
+      </div>
+      <a href="https://nashbot.onrender.com" class="btn">AUTOBOT</a>
+    </li>
+    <li>
+      <img src="https://i.imgur.com/9J9U7y0.jpeg alt="AUTO FB POST REACTION Image" class="project-image">
+      <h3>AUTO FB POST REACTION</h3>
+      <div class="project-description">
+        <p>I want to introduce my web-to-app. Please download it and enjoy.</p>
+      </div>
+      <a href="https://www.apkfiles.com/apk-615022/autoreact" class="btn">AUTO REACT</a>
+    </li>
+    <li>
+      <img src="https://i.imgur.com/6IavJPv.jpeg" alt="NASH API ENDPOINT Image" class="project-image">
+      <h3>NASH API ENDPOINT</h3>
+      <div class="project-description">
+        <p>I want to introduce my REST API. You can use it to create your bot commands or website.</p>
+      </div>
+      <a href="https://nash-api-end.onrender.com/" class="btn">NASH API END</a>
+    </li>
+    <li>
+  <img src="https://i.imgur.com/Kw0Y0uR.jpeg" alt="NashBot Chatbot Image" class="project-image">
+  <h3>NashBot AI Chatbot</h3>
+  <div class="project-description">
+    <p>Introducing NashBot, an AI chatbot designed to provide seamless and interactive conversations. Features include persistent chat history, customizable chat names, and real-time responses. Experience the power of NashBot and engage in dynamic conversations without losing any context!</p>
+  </div>
+  <a href="other-html/nash.html" class="btn">NashBot</a>
+  </li>
+    <li>
+      <img src="https://i.imgur.com/WMVaY2O.jpeg" alt="NGL SPAMMER Image" class="project-image">
+      <h3>NGL SPAMMER</h3>
+      <div class="project-description">
+        <p>I just want to introduce my ngl spammer website you can use it and make it fun.</p>
+      </div>
+      <a href="other-html/nglspam.html" class="btn">NGL SPAM</a>
+    </li>
+    <li>
+      <img src="https://i.imgur.com/WMVaY2O.jpeg" alt="SPAM SHARE FB POST Image" class="project-image">
+      <h3>SPAM SHARE FB POST</h3>
+      <div class="project-description">
+        <p>This is a spam share facebook posts you use it and enjoy.</p>
+      </div>
+      <a href="other-html/spamshare.html" class="btn">SPAM SHARE</a>
+    </li>
+  </ul>
+</div>
+  <div id="video-gallery" class="section video-gallery">
+  <h2>Video Gallery</h2>
+  <p class="scroll-notice">Scroll horizontally to view more videos.</p>
+  <div class="video-gallery-container">
+    <div class="video-item">
+      <video controls>
+        <source src="https://i.imgur.com/QgcWRIe.mp4" type="video/mp4">
+      </video>
+      <p>Cute Girl Ever</p>
+    </div>
+    <div class="video-item">
+      <video controls>
+        <source src="https://i.imgur.com/NydhZGw.mp4" type="video/mp4">
+      </video>
+      <p>Ang Laki Ng Ugali</p>
+    </div>
+    <div class="video-item">
+      <video controls>
+        <source src="https://i.imgur.com/INqk9TH.mp4" type="video/mp4">
+      </video>
+      <p>Pag May Problema Ka Isayaw Mo Lang Yan</p>
+    </div>
+    <div class="video-item">
+      <video controls>
+        <source src="https://i.imgur.com/YSjFlcc.mp4" type="video/mp4">
+      </video>
+      <p>title: Where is My bf?</p>
+    </div>
+  </div>
+</div>
+  <div id="achievements" class="section achievements">
+    <h2>Achievements</h2>
+    <div class="achievement-item">
+      <h3>Completed 6 Projects</h3>
+      <p>Successfully developed and launched 6 projects, including APIs and web applications.</p>
+    </div>
+    <div class="achievement-item">
+      <h3>Top Contributor</h3>
+      <p>Recognized as a top contributor on GitHub for multiple open-source projects.</p>
+    </div>
+  </div>
+
+  <div id="videos" class="section">
+    <h2>Tutorials Videos</h2>
+    <div class="video-container">
+      <div class="video">
+        <iframe src="https://www.youtube.com/embed/jD_E3yRUkEM?si=Ou0w0glni-O9e20A" title="Tutorial Video 1" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <div id="contact" class="external-links">
+    <h2>Contact Me</h2>
+    <p>free to reach out through my <a href="mailto:joshuaapostol909@gmail.com">email</a> or connect with me on <a href="https://github.com/joshuaAposto" target="_blank">Github</a>
+  </div>
+  
+  <div id="resume" class="resume">
+    <h2>Resume</h2>
+    <p>Download my resume to get a detailed view of my education, work experience, and skills.</p>
+    <a href="resume/resume.pdf" class="resume-btn">Download Resume</a>
+  </div>
+  
+  <div class="counter-container">
+    <p>Visitor Counter:</p>
+    <script type="text/javascript" src="https://www.counters-free.net/count/fx7q"></script><br>
+    </div>
+  </div>
+
+  <div class="counter-container">
+    <p>Thank you for visiting my portfolio!</p>
+    <p>Last updated on: <span id="last-updated"></span></p>
+  </div>
+
+  <div id="notification-banner" class="notification-banner">
+    <h2>Coming Soon!</h2>
+    <span class="notification-text">Our upcoming projects, NGL Spammer and Spam Share, will be available soon. Stay tuned for updates and exciting features!</span>
+    <span id="countdown-timer" class="countdown-timer">10</span>
+    <button class="notification-close">&times;</button>
+  </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  function updateClock() {
+    const clock = document.getElementById('liveClock');
+    const now = new Date();
+    clock.textContent = now.toLocaleTimeString();
+  }
+  
+  setInterval(updateClock, 1000);
+});
+document.addEventListener('DOMContentLoaded', function() {
+  const videos = document.querySelectorAll('.video-item video');
+
+  videos.forEach(video => {
+    video.addEventListener('play', function() {
+      videos.forEach(v => {
+        if (v !== video) {
+          v.pause();
+        }
+      });
+    });
+  });
+});
+document.addEventListener('DOMContentLoaded', function() {
+  const banner = document.getElementById('notification-banner');
+  const closeBtn = document.querySelector('.notification-close');
+  const countdownTimer = document.getElementById('countdown-timer');
+
+  let countdown = 10;
+
+  setTimeout(() => {
+    banner.style.display = 'block';
+    const countdownInterval = setInterval(() => {
+      countdown--;
+      countdownTimer.textContent = countdown;
+
+      if (countdown <= 0) {
+        clearInterval(countdownInterval);
+        setTimeout(() => {
+          banner.style.display = 'none';
+        }, 1000);
+      }
+    }, 1000);
+  }, 1000);
+
+  closeBtn.addEventListener('click', () => {
+    banner.style.display = 'none';
+  });
+});
+document.getElementById('last-updated').textContent = new Date().toLocaleDateString();
+document.addEventListener('DOMContentLoaded', function() {
+  const skillBars = document.querySelectorAll('.skill-bar-fill');
+  
+  skillBars.forEach(skillBar => {
+    const skill = skillBar.getAttribute('data-skill');
+    skillBar.style.width = skill + '%';
+  });
+});
+</script>
+</body>
+</html>
