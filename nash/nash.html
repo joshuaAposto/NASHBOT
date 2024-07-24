@@ -41,6 +41,7 @@
     .reset-button { display: block; margin: 10px 0; padding: 10px; border-radius: 5px; background-color: #f44336; color: #fff; cursor: pointer; }
     .reset-button:hover { background-color: #d32f2f; }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 
@@ -66,14 +67,27 @@
 
 <span id="menu-toggle" class="menu-toggle" onclick="toggleSidebar()">☰</span>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        if (window.location.href === 'https://portfolio.joshuaapostol.site') {
-            alert('Access to this page is restricted. Please contact the administrator.');
-            window.location.href = 'about:blank'; // Redirect to a blank page or any other page
-        }
-    });
+<style>
+  .swal2-input {
+    width: 250px;
+    height: 40px;
+    font-size: 14px;
+    padding: 0 10px;
+  }
+  .swal2-popup {
+    font-size: 14px;
+  }
+  .swal2-confirm {
+    background-color: #4e54c8;
+    color: white;
+  }
+  .swal2-cancel {
+    background-color: #f44336;
+    color: white;
+  }
+</style>
 
+<script>
     const chatBox = document.getElementById('chat-box');
     const promptInput = document.getElementById('prompt');
     const sidebar = document.getElementById('sidebar');
@@ -117,7 +131,13 @@
         }
 
         if (!selectedModel) {
-            alert('Please select a model by typing "help" and choosing one.');
+            Swal.fire({
+                icon: 'info',
+                title: 'Model Selection Required',
+                text: 'Please select a model by typing "help" and choosing one.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#4e54c8'
+            });
             promptInput.value = ''; 
             return;
         }
@@ -126,62 +146,65 @@
         userMessageDiv.className = 'chat-message user-message';
         userMessageDiv.textContent = prompt;
         chatBox.appendChild(userMessageDiv);
-
         chatBox.scrollTop = chatBox.scrollHeight;
+
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'typing-indicator';
+        typingDiv.textContent = 'NashBot is typing...';
+        chatBox.appendChild(typingDiv);
 
         setTimeout(async () => {
             try {
+                typingDiv.remove();
+
                 const response = await fetch(apiEndpoints[selectedModel] + encodeURIComponent(prompt));
                 const data = await response.json();
 
                 const botMessageDiv = document.createElement('div');
                 botMessageDiv.className = 'chat-message bot-message';
 
-                let replyText = '';
-
-                if (selectedModel === 'gpt-3') {
-                    replyText = data.result.reply;
-                } else if (selectedModel === 'Glm4') {
-                    replyText = data.fullResponse;
-                } else if (selectedModel === 'Gemini') {
-                    replyText = data.response;
-                }
-
+                let replyText = data.result ? data.result.reply : data.response || data.fullResponse;
                 replyText = replyText.replace(/OpenAI|GPT|ChatGPT/g, 'NashBot');
 
-                const codeRegex = /```\s*([\s\S]*?)\s*```/g;
-                let match;
-                let lastIndex = 0;
+                if (replyText.includes('```')) {
+                    const codeBlocks = replyText.match(/```([^`]+)```/g) || [];
+                    let lastIndex = 0;
 
-                while ((match = codeRegex.exec(replyText)) !== null) {
-                    if (lastIndex < match.index) {
-                        const preText = replyText.slice(lastIndex, match.index);
-                        const preTextDiv = document.createElement('div');
-                        preTextDiv.textContent = preText;
-                        botMessageDiv.appendChild(preTextDiv);
+                    codeBlocks.forEach((block, index) => {
+                        const match = block.match(/```([^`]+)```/);
+                        if (match) {
+                            if (lastIndex < match.index) {
+                                const preText = replyText.slice(lastIndex, match.index);
+                                const preTextDiv = document.createElement('div');
+                                preTextDiv.textContent = preText;
+                                botMessageDiv.appendChild(preTextDiv);
+                            }
+
+                            const codeText = match[1];
+                            const codeDiv = document.createElement('div');
+                            codeDiv.className = 'code-box';
+                            codeDiv.textContent = codeText;
+
+                            const copyButton = document.createElement('button');
+                            copyButton.className = 'copy-button';
+                            copyButton.textContent = 'Copy';
+                            copyButton.onclick = () => copyToClipboard(codeText, copyButton);
+
+                            codeDiv.appendChild(copyButton);
+                            botMessageDiv.appendChild(codeDiv);
+
+                            lastIndex = match.index + match[0].length;
+                        }
+                    });
+
+                    if (lastIndex < replyText.length) {
+                        const remainingText = replyText.slice(lastIndex);
+                        const remainingTextDiv = document.createElement('div');
+                        remainingTextDiv.textContent = remainingText;
+                        botMessageDiv.appendChild(remainingTextDiv);
                     }
-
-                    const codeText = match[1];
-                    const codeDiv = document.createElement('div');
-                    codeDiv.className = 'code-box';
-                    codeDiv.textContent = codeText;
-
-                    const copyButton = document.createElement('button');
-                    copyButton.className = 'copy-button';
-                    copyButton.textContent = 'Copy';
-                    copyButton.onclick = () => copyToClipboard(codeText, copyButton);
-
-                    codeDiv.appendChild(copyButton);
-                    botMessageDiv.appendChild(codeDiv);
-
-                    lastIndex = match.index + match[0].length;
-                }
-
-                if (lastIndex < replyText.length) {
-                    const remainingText = replyText.slice(lastIndex);
-                    const remainingTextDiv = document.createElement('div');
-                    remainingTextDiv.textContent = remainingText;
-                    botMessageDiv.appendChild(remainingTextDiv);
+                } else {
+                    botMessageDiv.textContent = replyText;
                 }
 
                 chatBox.appendChild(botMessageDiv);
@@ -211,15 +234,28 @@
     }
 
     function promptNewChatName() {
-        const chatName = prompt('Enter a name for this chat (or type "No" to discard):');
-        if (chatName !== null) {
-            if (chatName.trim().toLowerCase() !== 'no') {
-                saveChatHistory(chatName);
-                updateChatList();
+        Swal.fire({
+            title: 'Enter a name for this chat',
+            input: 'text',
+            inputPlaceholder: 'Chat Name',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Save',
+            cancelButtonText: 'Discard',
+            confirmButtonColor: '#4e54c8',
+            cancelButtonColor: '#f44336',
+            background: '#000',
+            preConfirm: (chatName) => {
+                if (chatName) {
+                    saveChatHistory(chatName);
+                    updateChatList();
+                }
+                clearChat();
+                loadChatHistory();
             }
-            clearChat();
-            loadChatHistory();
-        }
+        });
     }
 
     function clearChat() {
@@ -337,16 +373,33 @@
     }
 
     function resetLocalStorage() {
-        if (confirm('Are you sure you want to reset local storage? This will delete all chat histories and settings.')) {
-            localStorage.removeItem('chatHistories');
-            localStorage.removeItem('selectedModel');
-            alert('Local storage has been reset.');
-            clearChat();
-            showWelcomeMessage();
-            updateChatList();
-        }
+        Swal.fire({
+            title: 'Reset Local Storage',
+            text: 'Are you sure you want to reset local storage? This will delete all chat histories and settings.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, reset it!',
+            cancelButtonText: 'Cancel',
+            background: '#000',
+            confirmButtonColor: '#4e54c8',
+            cancelButtonColor: '#f44336'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                localStorage.removeItem('chatHistories');
+                localStorage.removeItem('selectedModel');
+                Swal.fire({
+                    title: 'Reset Successful',
+                    text: 'Local storage has been reset.',
+                    background: '#000',
+                    icon: 'success',
+                    confirmButtonColor: '#4e54c8'
+                });
+                clearChat();
+                showWelcomeMessage();
+                updateChatList();
+            }
+        });
     }
 </script>
-
 </body>
 </html>
