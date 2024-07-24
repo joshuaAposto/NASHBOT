@@ -26,7 +26,7 @@
     .sidebar .chat-list { list-style: none; padding: 0; margin: 0; flex: 1; overflow-y: auto; }
     .sidebar .chat-item { background: #4e54c8; color: #fff; padding: 10px; border-radius: 5px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
     .sidebar .chat-item:hover { background: #8f94fb; }
-    .menu-toggle { font-size: 2rem; cursor: pointer; position: absolute; top: 20px; left: 20px; z-index: 1000; }
+    .menu-toggle { font-size: 2rem; cursor: pointer; position: absolute; top: 20px; left: 10px; z-index: 1000; }
     .menu-toggle.open { color: #fff; }
     .menu-toggle.close { color: #fff; }
     .menu-toggle:hover { color: #8f94fb; }
@@ -96,7 +96,7 @@
     let selectedModel = localStorage.getItem('selectedModel') || null;
 
     const apiEndpoints = {
-        'gpt-3': 'https://nash-api-end.onrender.com/gpt3?prompt=',
+        'NashBot-3': 'https://nash-api-end.onrender.com/gpt3?prompt=',
         'Glm4': 'https://nash-api-end.onrender.com/glm4?message=',
         'Gemini': 'https://nash-api-end.onrender.com/gemini?prompt='
     };
@@ -136,7 +136,8 @@
                 title: 'Model Selection Required',
                 text: 'Please select a model by typing "help" and choosing one.',
                 confirmButtonText: 'OK',
-                confirmButtonColor: '#4e54c8'
+                confirmButtonColor: '#4e54c8',
+                background: '#000'
             });
             promptInput.value = ''; 
             return;
@@ -305,7 +306,7 @@
             <p>Welcome to NashBot! How can I assist you today?</p>
             <p>To change the model, type "help" and select your desired model. The available models are:</p>
             <ul>
-                <li>gpt-3</li>
+                <li>NashBot-3</li>
                 <li>Glm4</li>
                 <li>Gemini</li>
             </ul>
@@ -315,7 +316,7 @@
     }
 
     function displayModelSelection() {
-        const models = ['gpt-3', 'Glm4', 'Gemini'];
+        const models = ['NashBot-3', 'Glm4', 'Gemini'];
         const modelSelectionDiv = document.createElement('div');
         modelSelectionDiv.className = 'model-selection';
         modelSelectionDiv.textContent = 'Select a model:';
@@ -345,7 +346,7 @@
     function displayHelpMessage() {
         const helpMessageDiv = document.createElement('div');
         helpMessageDiv.className = 'chat-message bot-message';
-        helpMessageDiv.textContent = `Please select a model by typing "help" and choosing one from the available models: gpt-3, Glm4, Gemini. You can type "switch model" anytime to change the model.`;
+        helpMessageDiv.textContent = `Please select a model by typing "help" and choosing one from the available models: NashBot-3, Glm4, Gemini. You can type "switch model" anytime to change the model.`;
         chatBox.appendChild(helpMessageDiv);
         chatBox.scrollTop = chatBox.scrollHeight;
     }
