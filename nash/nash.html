@@ -26,11 +26,11 @@
     .sidebar .chat-list { list-style: none; padding: 0; margin: 0; flex: 1; overflow-y: auto; }
     .sidebar .chat-item { background: #4e54c8; color: #fff; padding: 10px; border-radius: 5px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
     .sidebar .chat-item:hover { background: #8f94fb; }
-    .menu-toggle { font-size: 2rem; cursor: pointer; position: absolute; top: 20px; left: 10px; z-index: 1000; }
+    .menu-toggle { font-size: 2rem; cursor: pointer; position: absolute; top: 20px; left: 20px; z-index: 1000; }
     .menu-toggle.open { color: #fff; }
     .menu-toggle.close { color: #fff; }
     .menu-toggle:hover { color: #8f94fb; }
-    .typing-indicator { font-style: italic; color: #000; }
+    .typing-indicator { font-style: italic; color: #f4a261; }
     .btn-container { margin-top: auto; }
     .chat-header p { margin-top: 5px; font-size: 0.9rem; }
     .chat-item span { margin-right: 10px; }
@@ -67,6 +67,13 @@
 <span id="menu-toggle" class="menu-toggle" onclick="toggleSidebar()">☰</span>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.location.href === 'https://portfolio.joshuaapostol.site') {
+            alert('Access to this page is restricted. Please contact the administrator.');
+            window.location.href = 'about:blank'; // Redirect to a blank page or any other page
+        }
+    });
+
     const chatBox = document.getElementById('chat-box');
     const promptInput = document.getElementById('prompt');
     const sidebar = document.getElementById('sidebar');
@@ -75,7 +82,7 @@
     let selectedModel = localStorage.getItem('selectedModel') || null;
 
     const apiEndpoints = {
-        'NashBot-3': 'https://nash-api-end.onrender.com/gpt3?prompt=',
+        'gpt-3': 'https://nash-api-end.onrender.com/gpt3?prompt=',
         'Glm4': 'https://nash-api-end.onrender.com/glm4?message=',
         'Gemini': 'https://nash-api-end.onrender.com/gemini?prompt='
     };
@@ -119,70 +126,62 @@
         userMessageDiv.className = 'chat-message user-message';
         userMessageDiv.textContent = prompt;
         chatBox.appendChild(userMessageDiv);
-        chatBox.scrollTop = chatBox.scrollHeight;
 
-        const typingDiv = document.createElement('div');
-        typingDiv.className = 'typing-indicator';
-        typingDiv.textContent = 'NashBot is typing...';
-        chatBox.appendChild(typingDiv);
         chatBox.scrollTop = chatBox.scrollHeight;
 
         setTimeout(async () => {
-            chatBox.removeChild(typingDiv);
-
             try {
-                const response = await fetch(`${apiEndpoints[selectedModel]}${encodeURIComponent(prompt)}`);
+                const response = await fetch(apiEndpoints[selectedModel] + encodeURIComponent(prompt));
                 const data = await response.json();
 
                 const botMessageDiv = document.createElement('div');
                 botMessageDiv.className = 'chat-message bot-message';
 
                 let replyText = '';
-                if (data.result && data.result.reply) {
+
+                if (selectedModel === 'gpt-3') {
                     replyText = data.result.reply;
-                    replyText = replyText.replace(/OpenAI|GPT|ChatGPT/g, 'NashBot');
-                    const codeRegex = /```([\s\S]*?)```/g;
-                    let match;
-                    let lastIndex = 0;
+                } else if (selectedModel === 'Glm4') {
+                    replyText = data.fullResponse;
+                } else if (selectedModel === 'Gemini') {
+                    replyText = data.response;
+                }
 
-                    while ((match = codeRegex.exec(replyText)) !== null) {
-                        if (match.index > lastIndex) {
-                            const preText = replyText.slice(lastIndex, match.index);
-                            const preTextDiv = document.createElement('div');
-                            preTextDiv.textContent = preText;
-                            botMessageDiv.appendChild(preTextDiv);
-                        }
+                replyText = replyText.replace(/OpenAI|GPT|ChatGPT/g, 'NashBot');
 
-                        const codeText = match[1];
-                        const codeDiv = document.createElement('div');
-                        codeDiv.className = 'code-box';
-                        codeDiv.textContent = codeText;
+                const codeRegex = /```\s*([\s\S]*?)\s*```/g;
+                let match;
+                let lastIndex = 0;
 
-                        const copyButton = document.createElement('button');
-                        copyButton.className = 'copy-button';
-                        copyButton.textContent = 'Copy';
-                        copyButton.onclick = () => copyToClipboard(codeText, copyButton);
-
-                        codeDiv.appendChild(copyButton);
-                        botMessageDiv.appendChild(codeDiv);
-
-                        lastIndex = match.index + match[0].length;
+                while ((match = codeRegex.exec(replyText)) !== null) {
+                    if (lastIndex < match.index) {
+                        const preText = replyText.slice(lastIndex, match.index);
+                        const preTextDiv = document.createElement('div');
+                        preTextDiv.textContent = preText;
+                        botMessageDiv.appendChild(preTextDiv);
                     }
 
-                    if (lastIndex < replyText.length) {
-                        const remainingText = replyText.slice(lastIndex);
-                        const remainingTextDiv = document.createElement('div');
-                        remainingTextDiv.textContent = remainingText;
-                        botMessageDiv.appendChild(remainingTextDiv);
-                    }
-                } else {
-                    if (selectedModel === 'Glm4') {
-                        botMessageDiv.textContent = data.fullResponse;
-                    } else if (selectedModel === 'Gemini') {
-                        botMessageDiv.textContent = data.response;
-                    } else {
-                        botMessageDiv.textContent = data.result.reply;
-                    }
+                    const codeText = match[1];
+                    const codeDiv = document.createElement('div');
+                    codeDiv.className = 'code-box';
+                    codeDiv.textContent = codeText;
+
+                    const copyButton = document.createElement('button');
+                    copyButton.className = 'copy-button';
+                    copyButton.textContent = 'Copy';
+                    copyButton.onclick = () => copyToClipboard(codeText, copyButton);
+
+                    codeDiv.appendChild(copyButton);
+                    botMessageDiv.appendChild(codeDiv);
+
+                    lastIndex = match.index + match[0].length;
+                }
+
+                if (lastIndex < replyText.length) {
+                    const remainingText = replyText.slice(lastIndex);
+                    const remainingTextDiv = document.createElement('div');
+                    remainingTextDiv.textContent = remainingText;
+                    botMessageDiv.appendChild(remainingTextDiv);
                 }
 
                 chatBox.appendChild(botMessageDiv);
@@ -270,7 +269,7 @@
             <p>Welcome to NashBot! How can I assist you today?</p>
             <p>To change the model, type "help" and select your desired model. The available models are:</p>
             <ul>
-                <li>NASHBOT-3</li>
+                <li>gpt-3</li>
                 <li>Glm4</li>
                 <li>Gemini</li>
             </ul>
@@ -280,7 +279,7 @@
     }
 
     function displayModelSelection() {
-        const models = ['NashBot-3', 'Glm4', 'Gemini'];
+        const models = ['gpt-3', 'Glm4', 'Gemini'];
         const modelSelectionDiv = document.createElement('div');
         modelSelectionDiv.className = 'model-selection';
         modelSelectionDiv.textContent = 'Select a model:';
@@ -310,7 +309,7 @@
     function displayHelpMessage() {
         const helpMessageDiv = document.createElement('div');
         helpMessageDiv.className = 'chat-message bot-message';
-        helpMessageDiv.textContent = `Please select a model by typing "help" and choosing one from the available models: NashBot-3, Glm4, Gemini. You can type "switch model" anytime to change the model.`;
+        helpMessageDiv.textContent = `Please select a model by typing "help" and choosing one from the available models: gpt-3, Glm4, Gemini. You can type "switch model" anytime to change the model.`;
         chatBox.appendChild(helpMessageDiv);
         chatBox.scrollTop = chatBox.scrollHeight;
     }
