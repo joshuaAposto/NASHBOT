@@ -1,39 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard - NashBot AI Chatbot</title>
-<style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Arial, sans-serif; background: linear-gradient(45deg, #4e54c8, #8f94fb); color: #fff; height: 100vh; display: flex; flex-direction: column; }
-    .header { background: rgba(0, 0, 0, 0.8); padding: 10px; text-align: center; }
-    .header h1 { margin-bottom: 10px; }
-    .header p { font-size: 1.2rem; }
-    .section { background: rgba(255, 255, 255, 0.1); border: 2px solid #fff; border-radius: 5px; padding: 20px; margin-bottom: 20px; }
-    .section h2 { margin-bottom: 10px; }
-    .section p { margin-bottom: 10px; line-height: 1.6; }
-    .section ul { margin: 10px 0; padding-left: 20px; }
-    .section ul li { margin-bottom: 10px; }
-    .btn { background: #4e54c8; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; transition: background 0.3s ease; text-decoration: none; }
-    .btn:hover { background: #8f94fb; }
-    .footer { background: rgba(0, 0, 0, 0.8); padding: 10px; text-align: center; }
-    .footer p { margin: 0; }
-    .footer a { color: #8f94fb; text-decoration: none; }
-    .footer a:hover { text-decoration: underline; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
+        .header { background: linear-gradient(135deg, #007bff, #00c6ff); padding: 20px; text-align: center; color: #fff; }
+        .header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .header p { font-size: 1.2rem; }
+        .container { flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
+        .section { background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 20px; box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); }
+        .section h2 { font-size: 1.8rem; margin-bottom: 10px; color: #007bff; }
+        .section p { font-size: 1rem; margin-bottom: 10px; }
+        .btn { background: linear-gradient(135deg, #007bff, #00c6ff); color: #fff; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; transition: background 0.3s ease, transform 0.2s ease; text-decoration: none; display: inline-block; font-size: 1rem; }
+        .btn:hover { background: linear-gradient(135deg, #0056b3, #00aaff); transform: scale(1.05); }
+        .comments { display: flex; flex-direction: column; gap: 10px; }
+        .comment { display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #ddd; background: #f9f9f9; border-radius: 8px; position: relative; }
+        .comment img { width: 50px; height: 50px; border-radius: 50%; margin-right: 10px; }
+        .details { flex: 1; }
+        .details .name { font-weight: bold; color: #007bff; }
+        .details .text { margin: 5px 0; }
+        .details .timestamp { font-size: 0.9rem; color: #666; }
+        .input-group { display: flex; gap: 10px; margin-top: 20px; }
+        .input-group input { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ddd; }
+        .input-group button { padding: 10px 20px; border-radius: 8px; border: none; background: #007bff; color: #fff; cursor: pointer; transition: background 0.3s ease, transform 0.2s ease; }
+        .input-group button:hover { background: #0056b3; transform: scale(1.05); }
+    </style>
 </head>
 <body>
-
 <div class="header">
     <h1>NashBot AI Chatbot Dashboard</h1>
+    <p>Welcome to the NashBot AI Chatbot dashboard. Here’s what you need to know to get started and make the most out of the app.</p>
 </div>
-
-<div class="header">
-    <div class="section">
-        <h2>Welcome to the NashBot AI Chatbot dashboard. Here’s what you need to know to get started and make the most out of the app.</h2>
-    </div>
-    
+<div class="container">
+    <!-- Sections -->
     <div class="section">
         <h2>Installation Instructions</h2>
         <p>To install the NashBot app on your device, follow these steps:</p>
@@ -44,35 +46,29 @@
             <li>Once installed, open the NashBot app and follow the setup instructions.</li>
         </ul>
     </div>
-    
     <div class="section">
-            <h2>Download the APK</h2>
-            <p>To download the NashBot APK, click the button below:</p>
-            <a href="NashBot Ai chatbot_1.0.apk" class="btn" download>Download APK</a>
+        <h2>Download the APK</h2>
+        <p>To download the NashBot APK, click the button below:</p>
+        <a href="NashBot Ai chatbot_1.0.apk" class="btn" download>Download APK</a>
     </div>
-
     <div class="section">
         <h2>Access NashBot Website</h2>
         <p>Visit our official website for more information and updates:</p>
         <a href="https://portfolio.joshuaapostol.site/nash/nash.html" class="btn" target="_blank">Visit NashBot Website</a>
     </div>
-    
     <div class="section">
         <h2>Setting Up the App</h2>
         <p>After installing the app, follow these steps to set it up:</p>
         <ul>
             <li>Open the NashBot app from your device.</li>
             <li>On first launch, choose a model from the available options:</li>
-            <ul>
-                <li><strong>Glm4:</strong> Optimized for specific tasks.</li>
-                <li><strong>Gemini:</strong> Advanced model with enhanced capabilities.</li>
-                <li><strong>NASHBOT-3.5:</strong> General-purpose language model.</li>
-            </ul>
+            <li><strong>Glm4:</strong> Optimized for specific tasks.</li>
+            <li><strong>Gemini:</strong> Advanced model with enhanced capabilities.</li>
+            <li><strong>NASHBOT-3.5:</strong> General-purpose language model.</li>
             <li>Type "help" in the chat for further instructions.</li>
             <li>You can switch models at any time by typing "switch model" in the chat.</li>
         </ul>
     </div>
-    
     <div class="section">
         <h2>Using the Chatbot</h2>
         <p>Here’s how to interact with NashBot:</p>
@@ -82,7 +78,6 @@
             <li>For specific help, type "help" in the chat.</li>
         </ul>
     </div>
-    
     <div class="section">
         <h2>Model Selection</h2>
         <p>To select or switch models:</p>
@@ -92,25 +87,131 @@
             <li>For example, type "Glm4" to use the Glm4 model or "Gemini" to use the Gemini model.</li>
         </ul>
     </div>
-    
     <div class="section">
         <h2>Contact Support</h2>
         <p>If you need further assistance or have any issues, contact support:</p>
         <ul>
             <li>Email: <a href="mailto:joshuaapostol909@gmail.com">joshuaapostol909@gmail.com</a></li>
-            <li>Support Hours: Monday to Friday, 9 AM - 6 PM</li>
+            <li>Support Hours: Saturday to Sunday, 9 AM - 6 PM</li>
         </ul>
     </div>
-    
     <div class="section">
         <h2>Feedback</h2>
         <p>For feedback and suggestions, please visit our Facebook page:</p>
         <a href="https://www.facebook.com/profile.php?id=61560621817740" class="btn" target="_blank">Visit Our Facebook Page</a>
     </div>
+    <div class="section">
+        <h2>Comments</h2>
+        <div id="commentsContainer" class="comments"></div>
+        <div class="input-group">
+            <input type="text" id="commentInput" placeholder="Add a comment">
+            <button onclick="addComment()">Comment</button>
+        </div>
+    </div>
 </div>
 
-<div class="footer">
-    <p>&copy; 2024 NASHBOT. All rights reserved.</p>
-</div>
+<script>
+    const badWords = [
+        "yawa", "bobo", "tangina", "putangina", "gago", "tarantado", "ulol", 
+        "siraulo", "lintik", "gunggong", "tanga", "hudas", "demonyo", 
+        "hinayupak", "animal", "bwisit", "pakshet", "inutil", "loka", 
+        "loko", "tangina", "bitch", "shit", "fuck", "puke", "asshole"
+    ];
+
+    const animeNames = [
+        "Naruto", "Sasuke", "Sakura", "Kakashi", "Hinata", "Sasuke", "Itachi", 
+        "Goku", "Vegeta", "Bulma", "Gohan", "Piccolo", "Frieza", "Cell", "Majin Buu", 
+        "Luffy", "Zoro", "Nami", "Sanji", "Usopp", "Chopper", "Robin", "Franky", 
+        "Brook", "Shanks", "Ace", "Jinbe", "Kakashi", "Naruto", "Sakura", "Sasuke", 
+        "Hinata", "Ino", "Tenten", "Neji", "Lee", "Gaara", "Orochimaru", "Kabuto", 
+        "Tobi", "Madara", "Obito", "Pain", "Konan", "Jiraiya", "Minato", "Kushina", 
+        "Killer Bee", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", 
+        "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", 
+        "Kirito", "Asuna", "Saber", "Rin", "Shiro", "Sora", "Asta", "Yuno", "Gon", 
+        "Killua", "Hiei", "Kurama", "Ed", "Al", "Winry", "Roy", "Riza", "Lelouch", 
+        "C.C.", "Kallen", "Shiroe", "Naotsugu", "Mio", "Ryuuk", "Light", "Misa", 
+        "Yagami", "Kira", "Meliodas", "Diane", "Elizabeth", "Escanor", "King", 
+        "Ban", "Gowther", "Hawk", "Natsu", "Gray", "Erza", "Juvia", "Wendy", 
+        "Cana", "Jellal", "Ultear", "Laxus", "Orga", "Lux", "Roxas", "Sora", 
+        "Kairi", "Aqua", "Ventus", "Terra", "Xion", "Aqua"
+    ];
+
+    function generateRandomPFP() {
+        return `https://randomuser.me/api/portraits/men/${Math.floor(Math.random() * 100)}.jpg`;
+    }
+
+    function getRandomAnimeName() {
+        return animeNames[Math.floor(Math.random() * animeNames.length)];
+    }
+
+    function addComment() {
+        const commentInput = document.getElementById('commentInput');
+        let filteredText = commentInput.value;
+
+        badWords.forEach(badWord => {
+            const regex = new RegExp(badWord, 'gi');
+            filteredText = filteredText.replace(regex, '****');
+        });
+
+        if (filteredText) {
+            const commentsContainer = document.getElementById('commentsContainer');
+            const commentElement = document.createElement('div');
+            commentElement.className = 'comment';
+            
+            const timestamp = new Date().toLocaleString();
+
+            commentElement.innerHTML = `
+                <img src="${generateRandomPFP()}" alt="User">
+                <div class="details">
+                    <div class="name">${getRandomAnimeName()}</div>
+                    <div class="text">${filteredText}</div>
+                    <div class="timestamp">${timestamp}</div>
+                </div>
+            `;
+
+            commentsContainer.appendChild(commentElement);
+            saveComments();
+            commentInput.value = '';
+            commentInput.focus();
+        }
+    }
+
+    function saveComments() {
+        const commentsContainer = document.getElementById('commentsContainer');
+        const comments = [];
+
+        commentsContainer.querySelectorAll('.comment').forEach(comment => {
+            comments.push({
+                pfp: comment.querySelector('img').src,
+                name: comment.querySelector('.name').textContent,
+                text: comment.querySelector('.text').textContent,
+                timestamp: comment.querySelector('.timestamp').textContent
+            });
+        });
+
+        localStorage.setItem('comments', JSON.stringify(comments));
+    }
+
+    function loadComments() {
+        const comments = JSON.parse(localStorage.getItem('comments')) || [];
+        const commentsContainer = document.getElementById('commentsContainer');
+
+        comments.forEach(comment => {
+            const commentElement = document.createElement('div');
+            commentElement.className = 'comment';
+            commentElement.innerHTML = `
+                <img src="${comment.pfp}" alt="User">
+                <div class="details">
+                    <div class="name">${comment.name}</div>
+                    <div class="text">${comment.text}</div>
+                    <div class="timestamp">${comment.timestamp}</div>
+                </div>
+            `;
+            commentsContainer.appendChild(commentElement);
+        });
+    }
+    
+    loadComments();
+</script>
 </body>
 </html>
