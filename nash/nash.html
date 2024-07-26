@@ -60,6 +60,7 @@
 <div id="sidebar" class="sidebar">
     <button class="btn" onclick="promptNewChatName()">New Chat</button>
     <button class="reset-button" onclick="resetLocalStorage()">Reset Local Storage</button>
+    <button class="btn" onclick="window.location.href='https://nashbot-documentation.onrender.com/'">API DOCUMENTATION</button>
     <div class="btn-container">
         <ul id="chat-list" class="chat-list"></ul>
     </div>
@@ -96,7 +97,7 @@
     let selectedModel = localStorage.getItem('selectedModel') || null;
 
     const apiEndpoints = {
-        'NashBot-3': 'https://nash-api-end.onrender.com/gpt3?prompt=',
+        'NashBot-3': 'https://nashbot-documentation.onrender.com/nashbot3?prompt=',
         'Glm4': 'https://nash-api-end.onrender.com/glm4?message=',
         'Gemini': 'https://nash-api-end.onrender.com/gemini?prompt='
     };
@@ -164,8 +165,20 @@
                 const botMessageDiv = document.createElement('div');
                 botMessageDiv.className = 'chat-message bot-message';
 
-                let replyText = data.result ? data.result.reply : data.response || data.fullResponse;
-                replyText = replyText.replace(/OpenAI|GPT|ChatGPT/g, 'NashBot');
+                let replyText;
+                if (data.result) {
+                    replyText = data.result.reply;
+                } else if (data.response) {
+                    replyText = data.response;
+                } else if (data.fullResponse) {
+                    replyText = data.fullResponse;
+                } else {
+                    replyText = 'No reply text found.';
+                }
+                
+                if (typeof replyText === 'object' && replyText !== null) {
+                    replyText = replyText.reply || 'Reply property not found in object.';
+                }
 
                 if (replyText.includes('```')) {
                     const codeBlocks = replyText.match(/```([^`]+)```/g) || [];
