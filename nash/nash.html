@@ -48,7 +48,7 @@
 <div class="chat-container">
     <div class="chat-header">
         <h1>NashBot AI Chatbot</h1>
-        <p>Version 1.0</p>
+        <p>Version 1.1</p>
     </div>
     <div id="chat-box" class="chat-box"></div>
     <div class="input-container">
@@ -99,7 +99,8 @@
     const apiEndpoints = {
         'NashBot-3': 'https://nashbot-documentation.onrender.com/nashbot3?prompt=',
         'Glm4': 'https://nash-api-end.onrender.com/glm4?message=',
-        'Gemini': 'https://nash-api-end.onrender.com/gemini?prompt='
+        'Gemini': 'https://nash-api-end.onrender.com/gemini?prompt=',
+        'LlaMA (New Model)': 'https://nash-api-end.onrender.com/llama-3-70b?q='
     };
 
     window.onload = function() {
@@ -172,9 +173,19 @@
                     replyText = data.response;
                 } else if (data.fullResponse) {
                     replyText = data.fullResponse;
+                } if (data.result) {
+                    replyText = data.result;
+                } else if (data.response) {
+                    replyText = data.response;
+                } else if (data.fullResponse) {
+                   replyText = data.fullResponse;
                 } else {
-                    replyText = 'No reply text found.';
+                   replyText = 'No reply text found.';
                 }
+
+        if (typeof replyText === 'object' && replyText !== null) {
+            replyText = replyText.reply || 'Reply property not found in object.';
+        }
                 
                 if (typeof replyText === 'object' && replyText !== null) {
                     replyText = replyText.reply || 'Reply property not found in object.';
@@ -322,6 +333,7 @@
                 <li>NashBot-3</li>
                 <li>Glm4</li>
                 <li>Gemini</li>
+                <li>LlaMA (New Model)</li>
             </ul>
             <p>You can type "switch model" anytime to change the model.</p>
         `;
@@ -329,7 +341,7 @@
     }
 
     function displayModelSelection() {
-        const models = ['NashBot-3', 'Glm4', 'Gemini'];
+        const models = ['NashBot-3', 'Glm4', 'Gemini', 'LlaMA (New Model)'];
         const modelSelectionDiv = document.createElement('div');
         modelSelectionDiv.className = 'model-selection';
         modelSelectionDiv.textContent = 'Select a model:';
