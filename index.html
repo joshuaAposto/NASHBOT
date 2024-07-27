@@ -16,16 +16,14 @@ body {
   background: linear-gradient(135deg, #1e3c72, #2a5298);
   color: #fff;
   line-height: 1.6;
-}
-
-.container {
-  max-width: 900px;
+  max-width: 800px;
   margin: 20px auto;
   padding: 20px;
-  background: rgba(0, 0, 0, 0.7);
-  border-radius: 10px;
+  background: rgba(0, 0, 0, 1.10);
+  border-radius: 1px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
+
 
 .header {
   text-align: center;
@@ -218,37 +216,8 @@ body {
 #live-clock-section h2 {
   color: #ffd700;
   margin-bottom: 20px;
-}
 
-.skills-container {
-  margin-bottom: 20px;
 }
-
-.skill {
-  margin-bottom: 15px;
-}
-
-.skill-bar {
-  height: 20px;
-  background-color: #444;
-  border-radius: 10px;
-  overflow: hidden;
-  margin-top: 5px;
-  position: relative;
-}
-
-.skill-bar-fill {
-  height: 100%;
-  background-color: #ffd700;
-  line-height: 20px;
-  position: relative;
-  width: 0;
-  transition: width 1s ease-in-out;
-  color: #000;
-  text-align: right;
-  padding-right: 10px;
-}
-
 .btn {
   display: inline-block;
   padding: 12px 25px;
@@ -456,6 +425,35 @@ body {
 
   .navbar a {
     padding: 10px;
+
+  }
+
+  .skills-container {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .skill {
+    flex: 1 1 80px;
+    margin: 10px;
+    text-align: center;
+  }
+
+  .skill-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 30px;
+  }
+
+  .skill-name {
+    font-size: 1.5rem;
+    color: #ffd700;
+  }
+
+  .skill-description {
+    color: #ddd;
   }
 
   .section {
@@ -542,55 +540,36 @@ body {
   </div>
 
   <div class="navbar">
-    <a href="#about">About</a>
     <a href="#portfolio">Portfolio</a>
     <a href="#videos">Tutorials</a>
     <a href="#contact">Contact</a>
     <a href="#achievements">Achievements</a>
     <a href="learn.html">Learn Code</a>
   </div>
-
-  <div id="about" class="section">
+  
+  <section id="skills" class="section">
     <h2>About Me</h2>
     <p>I’m passionate about learning new technologies and creating innovative projects. As a beginner in HTML, CSS, JS, and Node.js, I continually work on enhancing my skills and developing projects that inspire me.</p>
-    <div class="skills-container">
-      <h3>Skills</h3>
-      <div class="skill">
-        <span>HTML</span>
-        <div class="skill-bar">
-          <div class="skill-bar-fill" data-skill="70"><span>70%</span></div>
+      <h2>Skills</h2>
+      <div class="skills-container">
+        <div class="skill">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg" alt="HTML" class="skill-icon">
+          <p class="skill-name">HTML</p>
+        </div>
+        <div class="skill">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png" alt="JavaScript" class="skill-icon">
+          <p class="skill-name">JavaScript</p>
+        </div>
+        <div class="skill">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg" alt="Python" class="skill-icon">
+          <p class="skill-name">Python</p>
+        </div>
+        <div class="skill">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg" alt="Node.js" class="skill-icon">
+          <p class="skill-name">Node.js</p>
         </div>
       </div>
-      
-      <div class="skill">
-        <span>CSS</span>
-        <div class="skill-bar">
-          <div class="skill-bar-fill" data-skill="50"><span>50%</span></div>
-        </div>
-      </div>
-      
-      <div class="skill">
-        <span>JavaScript</span>
-        <div class="skill-bar">
-          <div class="skill-bar-fill" data-skill="30"><span>30%</span></div>
-        </div>
-      </div>
-      
-      <div class="skill">
-        <span>Node.js</span>
-        <div class="skill-bar">
-          <div class="skill-bar-fill" data-skill="60"><span>60%</span></div>
-        </div>
-      </div>
-      
-      <div class="skill">
-        <span>Python</span>
-        <div class="skill-bar">
-          <div class="skill-bar-fill" data-skill="20"><span>20%</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
+    </section>
   
   <div id="live-clock-section" class="section">
     <h2>Live Clock</h2>
@@ -726,18 +705,6 @@ body {
     </div>
   </div>
 
-  <div class="counter-container">
-    <p>Thank you for visiting my portfolio!</p>
-    <p>Last updated on: <span id="last-updated"></span></p>
-  </div>
-
-  <div id="notification-banner" class="notification-banner">
-    <h2>Coming Soon!</h2>
-    <span class="notification-text">Our upcoming projects, NGL Spammer and Spam Share, will be available soon. Stay tuned for updates and exciting features!</span>
-    <span id="countdown-timer" class="countdown-timer">10</span>
-    <button class="notification-close">&times;</button>
-  </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   function updateClock() {
@@ -759,41 +726,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       });
     });
-  });
-});
-document.addEventListener('DOMContentLoaded', function() {
-  const banner = document.getElementById('notification-banner');
-  const closeBtn = document.querySelector('.notification-close');
-  const countdownTimer = document.getElementById('countdown-timer');
-
-  let countdown = 10;
-
-  setTimeout(() => {
-    banner.style.display = 'block';
-    const countdownInterval = setInterval(() => {
-      countdown--;
-      countdownTimer.textContent = countdown;
-
-      if (countdown <= 0) {
-        clearInterval(countdownInterval);
-        setTimeout(() => {
-          banner.style.display = 'none';
-        }, 1000);
-      }
-    }, 1000);
-  }, 1000);
-
-  closeBtn.addEventListener('click', () => {
-    banner.style.display = 'none';
-  });
-});
-document.getElementById('last-updated').textContent = new Date().toLocaleDateString();
-document.addEventListener('DOMContentLoaded', function() {
-  const skillBars = document.querySelectorAll('.skill-bar-fill');
-  
-  skillBars.forEach(skillBar => {
-    const skill = skillBar.getAttribute('data-skill');
-    skillBar.style.width = skill + '%';
   });
 });
 </script>
