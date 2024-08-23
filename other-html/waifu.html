@@ -165,11 +165,12 @@
           throw new Error('Could not fetch the image. Please try again.');
         }
 
-        const data = await response.json();
-        if (data.images && data.images.length > 0) {
-          img.src = data.images[0].url;
-          downloadButton.href = data.images[0].url;
-          downloadButton.style.display = 'inline-block';
+        const link = document.createElement('a');
+          link.href = imageUrl;
+          link.download = 'waifu_image.jpg';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
         } else {
           img.src = 'https://i.imgur.com/tX8vEZJ.jpeg';
           alert('No images found for the selected tag.');
