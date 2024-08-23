@@ -32,7 +32,6 @@
       font-size: 16px;
       cursor: pointer;
       transition: background-color 0.3s ease, color 0.3s ease;
-      animation: bounce 1s infinite;
     }
 
     #tag {
@@ -51,7 +50,13 @@
       margin-top: 20px;
       border-radius: 10px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-      animation: zoomIn 1s ease-in-out;
+    }
+
+    #loading {
+      display: none;
+      margin: 20px 0;
+      font-size: 18px;
+      color: #00aaff;
     }
 
     .credit {
@@ -59,7 +64,6 @@
       color: #888;
       margin-top: 20px;
       font-style: italic;
-      animation: fadeIn 3s ease-in-out;
     }
 
     #download {
@@ -88,29 +92,6 @@
         opacity: 1;
       }
     }
-
-    @keyframes bounce {
-      0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
-      }
-      40% {
-        transform: translateY(-10px);
-      }
-      60% {
-        transform: translateY(-5px);
-      }
-    }
-
-    @keyframes zoomIn {
-      from {
-        transform: scale(0.8);
-        opacity: 0;
-      }
-      to {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
   </style>
 </head>
 <body>
@@ -136,23 +117,29 @@
     <option value="uniform">Uniform</option>
   </select>
   <button id="generate">Generate</button>
+  <div id="loading">Loading...</div>
   <img id="img" src="https://i.imgur.com/tX8vEZJ.jpeg" alt="Generated image">
-  <a id="download" download="waifu_image.jpg">Download Image</a>
+  <a id="download" href="#" download="waifu_image.jpg">Download Image</a>
   <div class="credit">
-   &copy; by Joshua Apostol 2022 - 2025
+    &copy; Joshua Apostol 2022 - 2025
   </div>
   <script>
     const tags = document.querySelector('#tag');
     const img = document.querySelector('#img');
     const downloadButton = document.querySelector('#download');
+    const loading = document.querySelector('#loading');
 
     async function fetchData() {
+      loading.style.display = 'block';
+      downloadButton.style.display = 'none';
       try {
         const selectedTag = tags.value;
         if (selectedTag === 'choose') {
           alert('Please select a tag.');
+          loading.style.display = 'none';
           return;
         }
+        
         const apiUrl = 'https://api.waifu.im/search';
         const params = {
           included_tags: selectedTag,
@@ -165,12 +152,11 @@
           throw new Error('Could not fetch the image. Please try again.');
         }
 
-        const link = document.createElement('a');
-          link.href = imageUrl;
-          link.download = 'waifu_image.jpg';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
+        const data = await response.json();
+        if (data.images && data.images.length > 0) {
+          img.src = data.images[0].url;
+          downloadButton.href = data.images[0].url;
+          downloadButton.style.display = 'inline-block';
         } else {
           img.src = 'https://i.imgur.com/tX8vEZJ.jpeg';
           alert('No images found for the selected tag.');
