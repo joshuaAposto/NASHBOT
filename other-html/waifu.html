@@ -173,13 +173,13 @@
         } else {
           img.src = 'https://i.imgur.com/tX8vEZJ.jpeg';
           alert('No images found for the selected tag.');
-          downloadButton.style.display = 'none';
         }
       } catch (error) {
         console.error(error);
         img.src = 'https://i.imgur.com/tX8vEZJ.jpeg';
         alert('An error occurred while fetching the image.');
-        downloadButton.style.display = 'none';
+      } finally {
+        loading.style.display = 'none';
       }
     }
 
