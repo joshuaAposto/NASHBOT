@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waifu Generator</title>
+  <style>
+    body {
+      background: #121212;
+      color: #e0e0e0;
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+    }
+
+    h1 {
+      color: #00aaff;
+      margin-bottom: 20px;
+      font-size: 2.5rem;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    #tag,
+    #generate {
+      background-color: #1e1e1e;
+      color: #00aaff;
+      border: 2px solid #00aaff;
+      padding: 12px 24px;
+      margin: 10px;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      animation: bounce 1s infinite;
+    }
+
+    #tag {
+      width: 90%;
+      max-width: 300px;
+    }
+
+    #generate:hover {
+      background-color: #00aaff;
+      color: #121212;
+    }
+
+    #img {
+      max-width: 100%;
+      height: auto;
+      margin-top: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      animation: zoomIn 1s ease-in-out;
+    }
+
+    .credit {
+      font-size: 14px;
+      color: #888;
+      margin-top: 20px;
+      font-style: italic;
+      animation: fadeIn 3s ease-in-out;
+    }
+
+    #download {
+      background-color: #1e1e1e;
+      color: #00aaff;
+      border: 2px solid #00aaff;
+      padding: 12px 24px;
+      margin: 10px;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      display: none;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    #download:hover {
+      background-color: #00aaff;
+      color: #121212;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-10px);
+      }
+      60% {
+        transform: translateY(-5px);
+      }
+    }
+
+    @keyframes zoomIn {
+      from {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Waifu Generator</h1>
+  <select id="tag">
+    <option value="choose">Choose a Tag</option>
+    <option disabled>(NSEW)</option>
+    <option value="ass">Ass</option>
+    <option value="hentai">Hentai</option>
+    <option value="milf">Milf</option>
+    <option value="oral">Oral</option>
+    <option value="paizuri">Paizuri</option>
+    <option value="ecchi">Ecchi</option>
+    <option value="ero">Ero</option>
+    <option disabled>(Versatile)</option>
+    <option value="maid">Maid</option>
+    <option value="waifu">Waifu</option>
+    <option value="marin-kitagawa">Marin Kitagawa</option>
+    <option value="mori-calliope">Mori Calliope</option>
+    <option value="raiden-shogun">Raiden Shogun</option>
+    <option value="oppai">Oppai</option>
+    <option value="selfies">Selfies</option>
+    <option value="uniform">Uniform</option>
+  </select>
+  <button id="generate">Generate</button>
+  <img id="img" src="https://i.imgur.com/tX8vEZJ.jpeg" alt="Generated image">
+  <a id="download" download="waifu_image.jpg">Download Image</a>
+  <div class="credit">
+   &copy; Created by Joshua Apostol
+  </div>
+  <script>
+    const tags = document.querySelector('#tag');
+    const img = document.querySelector('#img');
+    const downloadButton = document.querySelector('#download');
+
+    async function fetchData() {
+      try {
+        const selectedTag = tags.value;
+        if (selectedTag === 'choose') {
+          alert('Please select a tag.');
+          return;
+        }
+        const apiUrl = 'https://api.waifu.im/search';
+        const params = {
+          included_tags: selectedTag,
+        };
+        const queryParams = new URLSearchParams(params);
+        const requestUrl = `${apiUrl}?${queryParams}`;
+        const response = await fetch(requestUrl);
+
+        if (!response.ok) {
+          throw new Error('Could not fetch the image. Please try again.');
+        }
+
+        const data = await response.json();
+        if (data.images && data.images.length > 0) {
+          img.src = data.images[0].url;
+          downloadButton.href = data.images[0].url;
+          downloadButton.style.display = 'inline-block';
+        } else {
+          img.src = 'https://i.imgur.com/tX8vEZJ.jpeg';
+          alert('No images found for the selected tag.');
+          downloadButton.style.display = 'none';
+        }
+      } catch (error) {
+        console.error(error);
+        img.src = 'https://i.imgur.com/tX8vEZJ.jpeg';
+        alert('An error occurred while fetching the image.');
+        downloadButton.style.display = 'none';
+      }
+    }
+
+    document.querySelector('#generate').addEventListener('click', fetchData);
+  </script>
+</body>
+</html>
