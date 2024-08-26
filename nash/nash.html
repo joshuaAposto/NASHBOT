@@ -48,7 +48,7 @@
 <div class="chat-container">
     <div class="chat-header">
         <h1>NashBot AI Chatbot</h1>
-        <p>Version 1.1</p>
+        <p>Version 2.0</p>
     </div>
     <div id="chat-box" class="chat-box"></div>
     <div class="input-container">
@@ -97,10 +97,10 @@
     let selectedModel = localStorage.getItem('selectedModel') || null;
 
     const apiEndpoints = {
-        'NashBot-3': 'https://nashbot-documentation.onrender.com/nashbot3?prompt=',
-        'Glm4': 'https://nash-api-end.onrender.com/glm4?message=',
-        'Gemini': 'https://nash-api-end.onrender.com/gemini?prompt=',
-        'LlaMA (New Model)': 'https://nash-api-end.onrender.com/llama-3-70b?q='
+        'NashBot-4': 'https://nashbot-api.onrender.com/nashbot3?prompt=',
+        'Gpt3': 'https://deku-rest-api.gleeze.com/new/gpt-3_5-turbo?prompt=',
+        'Gemini': 'https://nash-rest-api-production.up.railway.app/gemini?prompt=',
+        'LlaMA (New Model)': 'https://nash-rest-api-production.up.railway.app/llama-3-70b?q='
     };
 
     window.onload = function() {
@@ -330,8 +330,8 @@
             <p>Welcome to NashBot! How can I assist you today?</p>
             <p>To change the model, type "help" and select your desired model. The available models are:</p>
             <ul>
-                <li>NashBot-3</li>
-                <li>Glm4</li>
+                <li>NashBot-4</li>
+                <li>Gpt3</li>
                 <li>Gemini</li>
                 <li>LlaMA (New Model)</li>
             </ul>
@@ -341,7 +341,7 @@
     }
 
     function displayModelSelection() {
-        const models = ['NashBot-3', 'Glm4', 'Gemini', 'LlaMA (New Model)'];
+        const models = ['NashBot-4', 'Gpt3', 'Gemini', 'LlaMA (New Model)'];
         const modelSelectionDiv = document.createElement('div');
         modelSelectionDiv.className = 'model-selection';
         modelSelectionDiv.textContent = 'Select a model:';
@@ -371,7 +371,7 @@
     function displayHelpMessage() {
         const helpMessageDiv = document.createElement('div');
         helpMessageDiv.className = 'chat-message bot-message';
-        helpMessageDiv.textContent = `Please select a model by typing "help" and choosing one from the available models: NashBot-3, Glm4, Gemini. You can type "switch model" anytime to change the model.`;
+        helpMessageDiv.textContent = `Please select a model by typing "help" and choosing one from the available models: NashBot-4, Gpt3, Gemini. You can type "switch model" anytime to change the model.`;
         chatBox.appendChild(helpMessageDiv);
         chatBox.scrollTop = chatBox.scrollHeight;
     }
