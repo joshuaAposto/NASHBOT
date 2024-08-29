@@ -6,7 +6,7 @@
 <title>NashBot AI Chatbot</title>
 <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Arial, sans-serif; background: linear-gradient(45deg, #4e54c8, #8f94fb); color: #fff; height: 100vh; display: flex; }
+    body { font-family: Arial, sans-serif; background: linear-gradient(45deg, #141E30, #243B55); color: #fff; height: 100vh; display: flex; }
     .chat-container { flex: 1; display: flex; flex-direction: column; width: 100%; }
     .chat-header { text-align: center; padding: 20px; background-color: rgba(0, 0, 0, 0.8); }
     .chat-box { flex: 1; overflow-y: auto; padding: 20px; background: rgba(255, 255, 255, 0.1); position: relative; }
@@ -34,10 +34,10 @@
     .btn-container { margin-top: auto; }
     .chat-header p { margin-top: 5px; font-size: 0.9rem; }
     .chat-item span { margin-right: 10px; }
-    .model-selection { margin: 10px 0; padding: 10px; border-radius: 5px; border: 2px solid #fff; background-color: #4e54c8; color: #fff; cursor: pointer; }
-    .model-selection:hover { background-color: #8f94fb; }
-    .model-button { display: block; margin: 10px 0; padding: 10px; border-radius: 5px; background-color: #4e54c8; color: #fff; cursor: pointer; }
-    .model-button:hover { background-color: #8f94fb; }
+    .model-selection { margin: 10px 0; padding: 10px; border-radius: 5px; border: 2px solid #fff; background-color: #0099cc; color: #fff; cursor: pointer; }
+    .model-selection:hover { background-color: #00ccff; }
+    .model-button { display: block; margin: 10px 0; padding: 10px; border-radius: 5px; background-color: #0099cc; color: #fff; cursor: pointer; }
+    .model-button:hover { background-color: #00ccff; }
     .reset-button { display: block; margin: 10px 0; padding: 10px; border-radius: 5px; background-color: #f44336; color: #fff; cursor: pointer; }
     .reset-button:hover { background-color: #d32f2f; }
 </style>
@@ -48,7 +48,7 @@
 <div class="chat-container">
     <div class="chat-header">
         <h1>NashBot AI Chatbot</h1>
-        <p>Version 2.0</p>
+        <p>version 2.1</p>
     </div>
     <div id="chat-box" class="chat-box"></div>
     <div class="input-container">
@@ -100,7 +100,8 @@
         'NashBot-4': 'https://nashbot-api.onrender.com/nashbot3?prompt=',
         'Gpt3': 'https://deku-rest-api.gleeze.com/new/gpt-3_5-turbo?prompt=',
         'Gemini': 'https://nash-rest-api-production.up.railway.app/gemini?prompt=',
-        'LlaMA (New Model)': 'https://nash-rest-api-production.up.railway.app/llama-3-70b?q='
+        'LlaMA': 'https://nash-rest-api-production.up.railway.app/llama-3-70b?q=',
+        'Microsoft WizardLM (New Model)': 'https://deku-rest-api.gleeze.com/api/wizardlm?q='
     };
 
     window.onload = function() {
@@ -169,6 +170,7 @@
                 let replyText;
                 if (data.result) {
                     replyText = data.result.reply;
+                    replyText = data.result;
                 } else if (data.response) {
                     replyText = data.response;
                 } else if (data.fullResponse) {
@@ -333,7 +335,8 @@
                 <li>NashBot-4</li>
                 <li>Gpt3</li>
                 <li>Gemini</li>
-                <li>LlaMA (New Model)</li>
+                <li>LlaMA</li>
+                <li>Microsoft WizardLM (New Model)</li>
             </ul>
             <p>You can type "switch model" anytime to change the model.</p>
         `;
@@ -341,7 +344,7 @@
     }
 
     function displayModelSelection() {
-        const models = ['NashBot-4', 'Gpt3', 'Gemini', 'LlaMA (New Model)'];
+        const models = ['NashBot-4', 'Gpt3', 'Gemini', 'LlaMA', 'Microsoft WizardLM (New Model)'];
         const modelSelectionDiv = document.createElement('div');
         modelSelectionDiv.className = 'model-selection';
         modelSelectionDiv.textContent = 'Select a model:';
@@ -371,7 +374,7 @@
     function displayHelpMessage() {
         const helpMessageDiv = document.createElement('div');
         helpMessageDiv.className = 'chat-message bot-message';
-        helpMessageDiv.textContent = `Please select a model by typing "help" and choosing one from the available models: NashBot-4, Gpt3, Gemini. You can type "switch model" anytime to change the model.`;
+        helpMessageDiv.textContent = `Please select a model by typing "help" and choosing one from the available models: NashBot-4, Gpt3, Gemini, Llama, Microsoft WizardLM. You can type "switch model" anytime to change the model.`;
         chatBox.appendChild(helpMessageDiv);
         chatBox.scrollTop = chatBox.scrollHeight;
     }
