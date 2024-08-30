@@ -101,7 +101,11 @@
         'Gpt3': 'https://deku-rest-api.gleeze.com/new/gpt-3_5-turbo?prompt=',
         'Gemini': 'https://nash-rest-api-production.up.railway.app/gemini?prompt=',
         'LlaMA': 'https://nash-rest-api-production.up.railway.app/llama-3-70b?q=',
-        'Microsoft WizardLM (New Model)': 'https://deku-rest-api.gleeze.com/api/wizardlm?q='
+        'Microsoft WizardLM (New Model)': 'https://deku-rest-api.gleeze.com/api/wizardlm?q=',
+        'Ai Gf Pro': 'https://deku-rest-api.gleeze.com/api/ai-gf?q=',
+        'BlackBox Ai': 'https://deku-rest-api.gleeze.com/blackbox?prompt=',
+        'Bible': 'https://deku-rest-api.gleeze.com/bibles?verse=',
+        'Liner Pro': 'https://deku-rest-api.gleeze.com/api/liner?q='
     };
 
     window.onload = function() {
@@ -171,6 +175,8 @@
                 if (data.result) {
                     replyText = data.result.reply;
                     replyText = data.result;
+                    replyText = data.response;
+                    replyText = data.results;
                 } else if (data.response) {
                     replyText = data.response;
                 } else if (data.fullResponse) {
@@ -337,6 +343,10 @@
                 <li>Gemini</li>
                 <li>LlaMA</li>
                 <li>Microsoft WizardLM (New Model)</li>
+                <li>Ai Gf Pro</li>
+                <li>BlackBox Ai</li>
+                <li>Bible</li>
+                <li>Liner Pro</li>
             </ul>
             <p>You can type "switch model" anytime to change the model.</p>
         `;
@@ -344,7 +354,7 @@
     }
 
     function displayModelSelection() {
-        const models = ['NashBot-4', 'Gpt3', 'Gemini', 'LlaMA', 'Microsoft WizardLM (New Model)'];
+        const models = ['NashBot-4', 'Gpt3', 'Gemini', 'LlaMA', 'Microsoft WizardLM (New Model)', 'Ai Gf Pro', 'BlackBox Ai', 'Bible', 'Liner Pro'];
         const modelSelectionDiv = document.createElement('div');
         modelSelectionDiv.className = 'model-selection';
         modelSelectionDiv.textContent = 'Select a model:';
@@ -374,7 +384,7 @@
     function displayHelpMessage() {
         const helpMessageDiv = document.createElement('div');
         helpMessageDiv.className = 'chat-message bot-message';
-        helpMessageDiv.textContent = `Please select a model by typing "help" and choosing one from the available models: NashBot-4, Gpt3, Gemini, Llama, Microsoft WizardLM. You can type "switch model" anytime to change the model.`;
+        helpMessageDiv.textContent = `Please select a model by typing "help" and choosing one from the available models: NashBot-4, Gpt3, Gemini, Llama, Microsoft WizardLM, Ai Gf Pro, BlackBox Ai. You can type "switch model" anytime to change the model.`;
         chatBox.appendChild(helpMessageDiv);
         chatBox.scrollTop = chatBox.scrollHeight;
     }
