@@ -97,7 +97,7 @@
     let selectedModel = localStorage.getItem('selectedModel') || null;
 
     const apiEndpoints = {
-        'NashBot-4': 'https://nashbot-api.onrender.com/nashbot3?prompt=',
+        'NashBot': 'https://nash-rest-api-production.up.railway.app/nashbot?prompt=',
         'Gpt3': 'https://deku-rest-api.gleeze.com/new/gpt-3_5-turbo?prompt=',
         'Gemini': 'https://nash-rest-api-production.up.railway.app/gemini?prompt=',
         'LlaMA': 'https://nash-rest-api-production.up.railway.app/llama-3-70b?q=',
@@ -338,7 +338,7 @@
             <p>Welcome to NashBot! How can I assist you today?</p>
             <p>To change the model, type "help" and select your desired model. The available models are:</p>
             <ul>
-                <li>NashBot-4</li>
+                <li>NashBot</li>
                 <li>Gpt3</li>
                 <li>Gemini</li>
                 <li>LlaMA</li>
@@ -354,7 +354,7 @@
     }
 
     function displayModelSelection() {
-        const models = ['NashBot-4', 'Gpt3', 'Gemini', 'LlaMA', 'Microsoft WizardLM (New Model)', 'Ai Gf Pro', 'BlackBox Ai', 'Bible', 'Liner Pro'];
+        const models = ['NashBot', 'Gpt3', 'Gemini', 'LlaMA', 'Microsoft WizardLM (New Model)', 'Ai Gf Pro', 'BlackBox Ai', 'Bible', 'Liner Pro'];
         const modelSelectionDiv = document.createElement('div');
         modelSelectionDiv.className = 'model-selection';
         modelSelectionDiv.textContent = 'Select a model:';
@@ -384,7 +384,7 @@
     function displayHelpMessage() {
         const helpMessageDiv = document.createElement('div');
         helpMessageDiv.className = 'chat-message bot-message';
-        helpMessageDiv.textContent = `Please select a model by typing "help" and choosing one from the available models: NashBot-4, Gpt3, Gemini, Llama, Microsoft WizardLM, Ai Gf Pro, BlackBox Ai. You can type "switch model" anytime to change the model.`;
+        helpMessageDiv.textContent = `Please select a model by typing "help" and choosing one from the available models: NashBot, Gpt3, Gemini, Llama, Microsoft WizardLM, Ai Gf Pro, BlackBox Ai. You can type "switch model" anytime to change the model.`;
         chatBox.appendChild(helpMessageDiv);
         chatBox.scrollTop = chatBox.scrollHeight;
     }
