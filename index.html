@@ -1,497 +1,268 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio</title>
-    <link rel="stylesheet" href="assets/css/styles.css">
-    <link rel="shortcut icon" href="favicon.ico">
-    <style>
-        @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap");
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 
-        :root {
-            --primary-color: #3498DB;
-            --secondary-color: #1A5276;
-            --text-color: #ECF0F1;
-            --background-color: #2C3E50;
-            --font-family: 'Open Sans', sans-serif;
-            --nav-height: 60px;
-            --transition-speed: 0.3s;
-        }
+    :root {
+      --primary-color: #00f7ff;
+      --secondary-color: #ff00e6;
+      --background-color: #060615;
+      --text-color: #e0e0ff;
+      --nav-height: 80px;
+      --transition-speed: 0.3s;
+      --glow-strength: 5px;
+    }
 
-        body {
-            margin: 0;
-            font-family: var(--font-family);
-            background-color: var(--background-color);
-            color: var(--text-color);
-            overflow-x: hidden;
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        .l-header {
-            width: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            background: var(--primary-color);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            transition: transform var(--transition-speed) ease;
-        }
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(0, 247, 255, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(255, 0, 230, 0.1) 0%, transparent 20%);
+      background-attachment: fixed;
+    }
 
-        .l-header.scrolled {
-            transform: translateY(-100%);
-        }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
 
-        .nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: var(--nav-height);
-            padding: 0 1rem;
-        }
+    .best-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      background: rgba(6, 6, 21, 0.8);
+      backdrop-filter: blur(10px) saturate(180%);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      z-index: 1000;
+      transition: all var(--transition-speed) cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    }
 
-        .nav__logo {
-            font-size: 1.8rem;
-            color: var(--text-color);
-            text-decoration: none;
-            transition: color var(--transition-speed);
-        }
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 100%;
+    }
 
-        .nav__logo:hover {
-            color: #fff;
-        }
+    .nav-logo {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+      transition: all var(--transition-speed) ease;
+      text-shadow: 0 0 var(--glow-strength) var(--primary-color);
+    }
 
-        .nav__menu {
-            display: flex;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            transition: opacity var(--transition-speed);
-        }
+    .nav-menu {
+      display: flex;
+      list-style-type: none;
+    }
 
-        .nav__item {
-            margin-left: 1rem;
-        }
+    .nav-item {
+      margin-left: 30px;
+      position: relative;
+    }
 
-        .nav__link {
-            text-decoration: none;
-            color: var(--text-color);
-            font-weight: bold;
-            transition: color var(--transition-speed);
-        }
+    .nav-link {
+      color: var(--text-color);
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: 500;
+      padding: 10px 0;
+      transition: all var(--transition-speed) ease;
+      position: relative;
+      display: inline-block;
+    }
 
-        .nav__link:hover {
-            color: #fff;
-        }
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform var(--transition-speed) ease;
+    }
 
-        .nav__toggle {
-            display: none;
-        }
+    .nav-link:hover::before {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
 
-        @media screen and (max-width: 768px) {
-            .nav__menu {
-                display: none;
-                position: absolute;
-                top: var(--nav-height);
-                left: 0;
-                width: 100%;
-                background: rgba(0, 0, 0, 0.9);
-                color: #fff;
-                padding: 1rem;
-                flex-direction: column;
-            }
+    .nav-link:hover {
+      color: var(--primary-color);
+      text-shadow: 0 0 var(--glow-strength) var(--primary-color);
+    }
 
-            .nav__menu.show {
-                display: flex;
-            }
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      outline: none;
+    }
 
-            .nav__toggle {
-                display: block;
-                font-size: 1.5rem;
-                cursor: pointer;
-                color: var(--text-color);
-            }
-        }
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 30px;
+      height: 24px;
+    }
 
-        .main-bg {
-            height: 100vh;
-            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('background.jpg') no-repeat center center/cover;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: var(--text-color);
-        }
+    .hamburger span {
+      display: block;
+      width: 100%;
+      height: 4px;
+      background: var(--text-color);
+      border-radius: 2px;
+      transition: all var(--transition-speed) ease;
+    }
 
-        .home__title {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            animation: fadeIn var(--transition-speed) ease-in-out;
-        }
+    .hero {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
 
-        .home__name {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary-color);
-            margin-top: 0;
-            overflow: hidden;
-            white-space: nowrap;
-            border-right: none;
-            animation: typing 3.5s steps(40, end) both;
-        }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        linear-gradient(45deg, rgba(0, 247, 255, 0.1) 0%, transparent 100%),
+        linear-gradient(-45deg, rgba(255, 0, 230, 0.1) 0%, transparent 100%);
+      filter: blur(20px);
+      z-index: -1;
+    }
 
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
-        }
+    .hero-content {
+      max-width: 350px;
+      padding: 40px;
+      background: rgba(6, 6, 21, 0.6);
+      border-radius: 20px;
+      box-shadow: 0 0 40px rgba(0, 247, 255, 0.2);
+      backdrop-filter: blur(10px);
+    }
 
-        .section {
-            padding: 4rem 1rem;
-            text-align: center;
-            background: var(--secondary-color);
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin: 2rem 0;
-        }
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 var(--glow-strength) rgba(0, 247, 255, 0.5);
+    }
 
-        .section h2 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            color: var(--text-color);
-            animation: fadeIn var(--transition-speed) ease-in;
-        }
+    .cta-button {
+      display: inline-block;
+      padding: 12px 24px;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      color: var(--background-color);
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: 600;
+      transition: all var(--transition-speed) ease;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(0, 247, 255, 0.5);
+      margin-top: 20px;
+      position: relative;
+      overflow: hidden;
+    }
 
-        .section p {
-            font-size: 1rem;
-            color: var(--text-color);
-            margin: 0 0 2rem;
-            line-height: 1.6;
-        }
+    @media (max-width: 768px) {
+      .nav-menu {
+        position: fixed;
+        top: var(--nav-height);
+        left: 0;
+        right: 0;
+        background: rgba(6, 6, 21, 0.95);
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 0;
+        clip-path: circle(0% at 100% 0);
+        transition: all var(--transition-speed) cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      }
 
-        .skills-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 1rem;
-            justify-items: center;
-        }
+      .nav-menu.active {
+        clip-path: circle(150% at 100% 0);
+      }
 
-        .skill {
-            text-align: center;
-            color: var(--text-color);
-        }
-
-        .skill-icon {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 0.5rem;
-        }
-
-        .skill-name {
-            font-size: 1rem;
-            margin: 0;
-        }
-
-        .project-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .project-list li {
-            background: var(--primary-color);
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
-            padding: 1rem;
-            text-align: left;
-        }
-
-        .project-list li:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .project-image {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            border-radius: 8px;
-            transition: opacity var(--transition-speed);
-        }
-
-        .project-image:hover {
-            opacity: 0.8;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            background-color: #2980B9;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 4px;
-            font-weight: bold;
-            margin-top: 1rem;
-            transition: background-color var(--transition-speed);
-        }
-
-        .btn:hover {
-            background-color: #1A5276;
-        }
-
-        .back-to-top {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: var(--primary-color);
-            color: #fff;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            font-size: 1.5rem;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity var(--transition-speed), visibility var(--transition-speed);
-        }
-
-        .back-to-top.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .back-to-top:hover {
-            background: #1A5276;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .resume {
-            background: var(--secondary-color);
-            border-radius: 8px;
-            padding: 2rem;
-            text-align: center;
-            margin: 2rem 0;
-        }
-
-        .resume h2 {
-            font-size: 2.5rem;
-            color: var(--text-color);
-            margin-bottom: 1rem;
-        }
-
-        .resume p {
-            font-size: 1rem;
-            color: var(--text-color);
-            margin-bottom: 1.5rem;
-        }
-
-        .resume-btn {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            background-color: var(--primary-color);
-            color: #fff;
-            text-decoration: none;
-            border-radius: 4px;
-            font-weight: bold;
-            transition: background-color var(--transition-speed);
-        }
-
-        .resume-btn:hover {
-            background-color: #1A5276;
-        }
-
-        .counter-container {
-            background: var(--secondary-color);
-            border-radius: 8px;
-            padding: 1rem;
-            text-align: center;
-            margin: 2rem 0;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .counter-container p {
-            font-size: 1.25rem;
-            color: var(--text-color);
-            margin: 0;
-        }
-
-        .counter-container script {
-            margin-top: 1rem;
-        }
-    </style>
+      .nav-toggle {
+        display: block;
+      }
+    }
+  </style>
 </head>
 <body>
-
-    <header class="l-header">
-        <nav class="nav">
-        <img src="https://i.ibb.co/cLyLt65/Picsart-24-07-23-22-51-21-477.png" alt="Logo" style="
-        width: 50px; 
-        height: 50px; 
-        border-radius: 50%;
-        border: 5px solid #000; 
-        background: #fff; 
-    ">
-            <a href="#" class="nav__logo">Portfolio</a>
-            <div id="nav-toggle" class="nav__toggle">&#9776;</div>
-            <ul id="nav-menu" class="nav__menu">
-                <li class="nav__item"><a href="#home" class="nav__link">Home</a></li>
-                <li class="nav__item"><a href="#about" class="nav__link">About</a></li>
-                <li class="nav__item"><a href="#projects" class="nav__link">Projects</a></li>
-                <li class="nav__item"><a href="#resume" class="nav__link">Resume</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <section id="home" class="main-bg">
-        <div>
-            <h1 class="home__title">Welcome to My Portfolio</h1>
-            <h<h2 class="home__name" style="text-align: center;">Joshua Apostol</h2>
+  <nav class="best-nav">
+    <div class="container nav-container">
+      <a href="#" class="nav-logo">Apostol</a>
+      <ul class="nav-menu">
+        <li class="nav-item"><a href="#" class="nav-link active">Home</a></li>
+        <li class="nav-item"><a href="https://autosharee.onrender.com" class="nav-link">ShareBoster</a></li>
+        <li class="nav-item"><a href="https://www.facebook.com/profile.php?id=100088690249020" class="nav-link">Contact</a></li>
+      </ul>
+      <button class="nav-toggle" aria-label="Toggle navigation">
+        <div class="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
         </div>
-    </section>
-
-    <section id="about" class="section">
-        <h2>About Me</h2>
-        <p>I’m passionate about learning new technologies and creating innovative projects. As a beginner in HTML, CSS, JS, and Node.js, I continually work on enhancing my skills and developing projects that inspire me.</p>
-        <h2>Skills</h2>
-        <div class="skills-container">
-            <div class="skill">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg" alt="HTML" class="skill-icon">
-                <p class="skill-name">HTML</p>
-            </div>
-            <div class="skill">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png" alt="JavaScript" class="skill-icon">
-                <p class="skill-name">JavaScript</p>
-            </div>
-            <div class="skill">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg" alt="Python" class="skill-icon">
-                <p class="skill-name">Python</p>
-            </div>
-            <div class="skill">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg" alt="Node.js" class="skill-icon">
-                <p class="skill-name">Node.js</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="projects" class="section">
-        <h2>Projects</h2>
-        <ul class="project-list">
-            <li>
-                <img src="https://i.imgur.com/bNtTDI5.jpeg" alt="NASHBOT FB BOT Image" class="project-image">
-                <h3>NASHBOT FB BOT</h3>
-                <div class="project-description">
-                    <p>This is the best messenger chatbot because it can help you create an essay or anything you need for education. Currently, it has 39 commands.</p>
-                </div>
-                <a href="https://nash-bot-v2.onrender.com" class="btn">NASHBOT</a>
-            </li>
-            <li>
-                <img src="https://i.imgur.com/vdBytT7.jpeg" alt="AUTOBOT FB BOT Image" class="project-image">
-                <h3>AUTOBOT FB BOT</h3>
-                <div class="project-description">
-                    <p>This is the best messenger chatbot because it can help you create an essay or anything you need for education. Currently, it has 24 commands.</p>
-                </div>
-                <a href="https://nashbot.onrender.com" class="btn">AUTOBOT</a>
-            </li>
-            <li>
-                <img src="https://i.imgur.com/qAsM3DD.jpeg" alt="WAIFU Image" class="project-image">
-                <h3>Waifu</h3>
-                <div class="project-description">
-                    <p>Generate stunning waifu images with ease! Select a tag, click "Generate," and instantly get a new image. You can also download the generated image directly to your device.</p>
-                </div>
-                <a href="other-html/waifu.html" class="btn">Waifu</a>
-            </li>
-            <li>
-                <img src="https://i.imgur.com/6IavJPv.jpeg" alt="NASH API ENDPOINT Image" class="project-image">
-                <h3>NASH API ENDPOINT</h3>
-                <div class="project-description">
-                    <p>I want to introduce my REST API. You can use it to create your bot commands or website.</p>
-                </div>
-                <a href="https://nash-api-end.onrender.com/" class="btn">NASH API END</a>
-            </li>
-            <li>
-                <img src="https://i.imgur.com/Kw0Y0uR.jpeg" alt="NashBot Chatbot Image" class="project-image">
-                <h3>NashBot AI Chatbot</h3>
-                <div class="project-description">
-                    <p>Introducing NashBot, an AI chatbot designed to provide seamless and interactive conversations. Features include persistent chat history, customizable chat names, and real-time responses. Experience the power of NashBot and engage in dynamic conversations without losing any context!</p>
-                </div>
-                <a href="nash/index.html" class="btn">NashBot Ai Chatbot</a>
-            </li>
-            <li>
-                <img src="https://i.imgur.com/9J9U7y0.jpeg" alt="AUTO FB POST REACTION Image" class="project-image">
-                <h3>AUTO FB POST REACTION</h3>
-                <div class="project-description">
-                    <p>I want to introduce my web-to-app. Please download it and enjoy.</p>
-                </div>
-                <a href="other-html/maintenance.html" class="btn">AUTO REACT</a>
-            </li>
-            <li>
-                <img src="https://i.imgur.com/KBy7H6u.jpeg" alt="NGL SPAMMER Image" class="project-image">
-                <h3>NGL SPAMMER</h3>
-                <div class="project-description">
-                    <p>I just want to introduce my ngl spammer website you can use it and make it fun.</p>
-                </div>
-                <a href="other-html/nglspam.html" class="btn">NGL SPAM</a>
-            </li>
-            <li>
-                <img src="https://i.imgur.com/Ue4Qrwn.jpeg" alt="NGL SPAMMER Image" class="project-image">
-                <h3>Token EAAAAU getter fb</h3>
-                <div class="project-description">
-                    <p>Easily generate your EAAAAU token for Facebook with this tool. Perfect for managing your Facebook applications or automating tasks. Simply enter your username and password</p>
-                </div>
-                <a href="other-html/token.html" class="btn">Token Getter</a>
-            </li>
-        </ul>
+      </button>
     </div>
-    </section>
-
-    <div id="resume" class="resume">
-        <h2>Resume</h2>
-        <p>Download my resume to get a detailed view of my education, work experience, and skills.</p>
-        <a href="resume/resume.pdf" class="resume-btn">Download Resume</a>
+  </nav>
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <h1>Burat</h1>
+      <p>just click the view projects button to see all my projects like sharebooster for facebook post and other</p>
+      <a href="https://josh-projects.vercel.app" class="cta-button">View Projects</a>
     </div>
+  </section>
+  <script>
+    const navToggle = document.querySelector('.nav-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+    navMenu.classList.remove('active');
 
-    <div class="counter-container">
-        <p>Visitor Counter:</p>
-        <script type="text/javascript" src="https://www.counters-free.net/count/fx7q"></script>
-    </div>
-
-    <button class="back-to-top" id="back-to-top">&#9650;</button>
-
-    <script>
-    document.getElementById('nav-toggle').addEventListener('click', function() {
-        document.getElementById('nav-menu').classList.toggle('show');
+    navToggle.addEventListener('click', () => {
+      navMenu.classList.toggle('active');
     });
 
-    document.querySelectorAll('#nav-menu .nav__link').forEach(link => {
-        link.addEventListener('click', function() {
-            document.getElementById('nav-menu').classList.remove('show');
-        });
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        navMenu.classList.remove('active');
+      });
     });
-
-    window.addEventListener('scroll', function() {
-        const header = document.querySelector('.l-header');
-        const backToTopButton = document.getElementById('back-to-top');
-        if (window.scrollY > 50) {
-            header.classList.add('scrolled');
-            backToTopButton.classList.add('show');
-        } else {
-            header.classList.remove('scrolled');
-            backToTopButton.classList.remove('show');
-        }
-    });
-
-    document.getElementById('back-to-top').addEventListener('click', function() {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-</script>
+  </script>
 </body>
 </html>
